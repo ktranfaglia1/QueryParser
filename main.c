@@ -2,7 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 /**
- * This is the function which takes the command line inputs and turns them into 1 string for parsing
+ * @brief is the function which takes the command line inputs and turns them into 1 string for parsing
+ * 
+ * @param argc This is the number of strings being taken in to concatenate
+ * @param argv This is the strings being concatenated together
+ * 
+ * @return concatString the combined String
  */
 char* concatInput(int argc, char** argv){
     int strSize = 0;
