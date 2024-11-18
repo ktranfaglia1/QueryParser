@@ -8,7 +8,7 @@
 #include <string.h>
 #include <time.h>
 
-#define NUM_CARS 100
+#define NUM_CARS 10000000
 #define NUM_MODELS 225
 #define NUM_DEALERS 100
 #define NUM_COLORS 15
@@ -104,8 +104,14 @@ void generate_car_inventory(const char* filename, int num_cars) {
     printf("Car inventory generated and saved to %s\n", filename);
 }
 
+// Driver Program
 int main() {
-    // Generate car entries and save them to 'car_inventory.txt'
-    generate_car_inventory("car_inventory.txt", NUM_CARS);
+    clock_t start_time = clock();
+    
+    generate_car_inventory("car_inventory.txt", NUM_CARS);  // Generate car entries and save them to 'car_inventory.txt'
+
+    clock_t end_time = clock();
+
+    printf("Time: %.8f Seconds\n", ((double)(end_time - start_time)) / CLOCKS_PER_SEC);
     return 0;
 }

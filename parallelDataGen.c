@@ -96,7 +96,7 @@ void generate_car_inventory(const char* filename, int num_cars) {
         
         // Randomly generate make year and price
         int make_year = get_random_in_range(1924, 2024);
-        int price = get_random_in_range(10000, 50000);
+        int price = get_random_in_range(10, 50) * 1000;
 
         // Write the car's information to the file
         fprintf(car_inventory_file, "%d,%s,%d,%s,%d,%s\n", i, model, make_year, color, price, dealer);
@@ -106,8 +106,14 @@ void generate_car_inventory(const char* filename, int num_cars) {
     printf("Car inventory generated and saved to %s\n", filename);
 }
 
+// Driver Program
 int main() {
-    // Generate car entries and save them to 'car_inventory.txt'
-    generate_car_inventory("car_inventory.txt", NUM_CARS);
+    double start_time = omp_get_wtime();
+    
+    generate_car_inventory("car_inventory.txt", NUM_CARS);  // Generate car entries and save them to 'car_inventory.txt'
+
+    double end_time = omp_get_wtime();
+
+    printf("Time: %.8f Seconds\n", end_time - start_time);
     return 0;
 }
