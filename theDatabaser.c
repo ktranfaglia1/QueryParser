@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAXSTR 100
 
 typedef struct Car {
 	int ID;
@@ -14,7 +13,7 @@ typedef struct Car {
 } Car;
 
 typedef struct CarContainer {
-	int size;
+	int size;#define MAXSTR 100
 	Car *array;
 } CarContainer;
 
@@ -28,8 +27,19 @@ void freeDatabase(CarContainer* container) {
     free(container);
 }
 
-CarContainer* createDatabase () {
-//CarContainer* createDatabase() {
+void printDatabase(CarContainer* container) {
+    for (int i = 0; i < container->size; i++) {
+        printf("%d,%s,%d,%s,%d,%s\n",
+            container->array[i].ID, 
+            container->array[i].Model, 
+            container->array[i].YearMake, 
+            container->array[i].Color, 
+            container->array[i].Price, 
+            container->array[i].Dealer);
+    }
+}
+
+CarContainer* createDatabase() {
     CarContainer* container = (CarContainer*)malloc(sizeof(CarContainer));
 
 	container->size = 0;
@@ -58,16 +68,17 @@ CarContainer* createDatabase () {
 	container->array = (Car*)malloc(container->size * sizeof(Car));
 
     int index = 0;
-	while (fscanf(fp, "%d,%ms,%d,%ms,%d,%ms\n", 
+	while (fscanf(fp, "%d,%m[^,],%d,%m[^,],%d,%m[^,\n]\n", 
             &container->array[index].ID, 
             &container->array[index].Model, 
             &container->array[index].YearMake, 
             &container->array[index].Color, 
             &container->array[index].Price, 
             &container->array[index].Dealer) == 6) {
+        
         index++;
     }
-
+    
 	fclose(fp);
 
 	return container;
