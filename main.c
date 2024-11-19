@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "theDatabaser.c"
 /**
  * @brief is the function which takes the command line inputs and turns them into 1 string for parsing
  * 
@@ -35,7 +36,11 @@ char* concatInput(int argc, char** argv){
     return concatString;
 }
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
     char* queryString = concatInput(argc, argv);
+    CarContainer* database = createDatabase();
+
+    
+
+    freeDatabase(database)
 }

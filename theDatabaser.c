@@ -28,7 +28,7 @@ void freeDatabase(CarContainer* container) {
     free(container);
 }
 
-int main () {
+CarContainer* createDatabase () {
 //CarContainer* createDatabase() {
     CarContainer* container = (CarContainer*)malloc(sizeof(CarContainer));
 
@@ -69,7 +69,7 @@ int main () {
     }
 
 	fclose(fp);
-	freeDatabase(container);
 
-	return 0;
+	return container;
+	//freeDatabase(container);
 }
