@@ -27,35 +27,42 @@ typedef enum {
     DEALER
 } ComparisonObject;
 
+// Function prototypes
+int compare_int(int a, int b, ComparisonOperation op);
+int compare_string(const char* a, const char* b, ComparisonOperation op);
+int condition(const Car* car, const void* value, ComparisonOperation op, ComparisonObject obj);
+CarContainer* union_arrays(CarContainer* array1, CarContainer* array2);
+CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2);
 
-// Generalized filter function to return an array and count
+
+// Generalized filter function to return a filtered CarContainer
 CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOperation op, ComparisonObject obj) {
-    // Allocate space for the result array (initially arbitrary, grows if needed)
+    // Allocate space for the result container and initialize the CarContainer object
+    CarContainer* results = (CarContainer*)malloc(sizeof(CarContainer));
     int capacity = 32;
-    CarContainer* results = (CarContainer*)malloc(capacity * sizeof(Car*));
-    int* result_count = 0;
+    results->array = (Car*)malloc(capacity * sizeof(Car));
+    results->size = 0;
 
-    // Traverse each bucket in the original table
+    // Traverse each car in the container
     for (int i = 0; i < car_data->size; i++) {
-        Car* current = car_data[i];
+        Car* current = &car_data->array[i];  // Extract a car
 
-        // Traverse the linked list in the current bucket
-        while (current != NULL) {
-            if (condition(current, value, op, obj)) {
-                // Resize array if needed
-                if (*result_count == capacity) {
-                    capacity *= 2;
-                    results = (Car**)realloc(results, capacity * sizeof(Car*));
-                }
-                results[(*result_count)++] = current;  // Add pointer to car to the results
+        // Check if the car meets the condition
+        if (condition(current, value, op, obj)) {
+            // Resize array if capacity has been met
+            if (results->size == capacity) {
+                capacity *= 2;
+                results->array = (Car*)realloc(results->array, capacity * sizeof(Car));
             }
+            results->array[results->size++] = *current; // Add car to the result
         }
     }
-    results->size = *result_count;
-    return results;  // Return the array of matching entries
+
+    return results;  // Return the filtered container
 }
 
 
+// Compares two integers based on the specified comparison operation, given a and b for comparison
 int compare_int(int a, int b, ComparisonOperation op) {
     switch (op) {
         case GREATER_THAN: 
@@ -76,6 +83,7 @@ int compare_int(int a, int b, ComparisonOperation op) {
 }
 
 
+// Compares two strings using strcmp based on the specified comparison operation, given a and b for comparison
 int compare_string(const char* a, const char* b, ComparisonOperation op) {
     switch (op) {
         case EQUAL_TO: 
@@ -88,74 +96,74 @@ int compare_string(const char* a, const char* b, ComparisonOperation op) {
 }
 
 
+// Evaluates a condition for a specific car field using the specified comparison and comparison utility functions
 int condition(const Car* car, const void* value, ComparisonOperation op, ComparisonObject obj) {
     switch (obj) {
         case ID:
-            return compare_int(car->id, *(int*)value, op);
-
+            return compare_int(car->ID, *(int*)value, op);
         case PRICE:
-            return compare_int(car->price, *(int*)value, op);
-
+            return compare_int(car->Price, *(int*)value, op);
         case MAKE:
-            return compare_int(car->make_year, *(int*)value, op);
-
+            return compare_int(car->YearMake, *(int*)value, op);
         case MODEL:
-            return compare_string(car->model, (const char*)value, op);
-
+            return compare_string(car->Model, (const char*)value, op);
         case COLOR:
-            return compare_string(car->color, (const char*)value, op);
-
+            return compare_string(car->Color, (const char*)value, op);
         case DEALER:
-            return compare_string(car->dealer, (const char*)value, op);
-
+            return compare_string(car->Dealer, (const char*)value, op);
         default:
             return 0;
     }
 }
 
 
-// Union 
+// Union of two CarContainer arrays
 CarContainer* union_arrays(CarContainer* array1, CarContainer* array2) {
-    // Allocate space for the union of two arrays
-    int capacity = array1->size + array2->size;
-    CarContainer* result = (CarContainer*)malloc(capacity * sizeof(Car*));
-    int* result_count = 0;
+    // Allocate space for the result container and initialize the CarContainer object
+    CarContainer* result = (CarContainer*)malloc(sizeof(CarContainer));
+    result->array = (Car*)malloc((array1->size + array2->size) * sizeof(Car));
+    result->size = 0;
 
-    // Add all items from array1
+    // Add all cars from the first array to the result
     for (int i = 0; i < array1->size; i++) {
-        result[(*result_count)++] = array1[i];
+        result->array[result->size++] = array1->array[i];
     }
 
-    // Add items from array2 if they are not already in the result array
+    // Add cars from the second array only if they are not already in the result
     for (int i = 0; i < array2->size; i++) {
         int found = 0;
-        for (int j = 0; j < *result_count && !found; j++) {
-            if (array2[i]->id == result[j]->id) {
-                found = 1;
+        // Check if the car already exists in the result
+        for (int j = 0; j < result->size; j++) {
+            if (array2->array[i].ID == result->array[j].ID) {
+                found = 1;  // Mark as found
+                break;
             }
         }
+        // If not found, add the car to the result
         if (!found) {
-            result[(*result_count)++] = array2[i];
+            result->array[result->size++] = array2->array[i];
         }
     }
-    result->size = *result_count
     return result;
 }
 
-
+// Intersection of two CarContainer arrays
 CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
-    int capacity = (array1->size < array2->size) ? array1->size : array2->size;
-    CarContainer* result = (CarContainer*)malloc(capacity * sizeof(Car*));
-    int* result_count = 0;
+    // Allocate space for the result container and initialize the CarContainer object
+    CarContainer* result = (CarContainer*)malloc(sizeof(CarContainer));
+    result->array = (Car*)malloc((array1->size < array2->size ? array1->size : array2->size) * sizeof(Car));
+    result->size = 0;
 
+    // Iterate through the first array
     for (int i = 0; i < array1->size; i++) {
+        // Check if the current car is present in the second array
         for (int j = 0; j < array2->size; j++) {
-            if (array1[i]->id == array2[j]->id) {
-                result[(*result_count)++] = array1[i];
+            // If found, add the car to the result
+            if (array1->array[i].ID == array2->array[j].ID) {
+                result->array[result->size++] = array1->array[i];
                 break;
             }
         }
     }
-    result->size = *result_count
     return result;
 }
