@@ -13,7 +13,7 @@ typedef struct Car {
 } Car;
 
 typedef struct CarContainer {
-	int size;#define MAXSTR 100
+	int size;
 	Car *array;
 } CarContainer;
 
