@@ -3,37 +3,7 @@
 *  Last updated 11/18/24
 *  This program contains search utility functions to return a list of all entires that meet a certain criteria
 */
-#include <stdio.h>
-#include <stdlib.h>
-#include "theDatabaser.c"
-
-// Comparison operations
-typedef enum {
-    GREATER_THAN,
-    GREATER_EQUAL,
-    LESS_THAN,
-    LESS_EQUAL,
-    EQUAL_TO,
-    NOT_EQUAL_TO,
-} ComparisonOperation;
-
-// Comparison object
-typedef enum {
-    ID,
-    MODEL,
-    MAKE,
-    COLOR,
-    PRICE,
-    DEALER
-} ComparisonObject;
-
-// Function prototypes
-int compare_int(int a, int b, ComparisonOperation op);
-int compare_string(const char* a, const char* b, ComparisonOperation op);
-int condition(const Car* car, const void* value, ComparisonOperation op, ComparisonObject obj);
-CarContainer* union_arrays(CarContainer* array1, CarContainer* array2);
-CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2);
-
+#include "searchUtility.h"
 
 // Generalized filter function to return a filtered CarContainer
 CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOperation op, ComparisonObject obj) {
