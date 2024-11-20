@@ -39,13 +39,18 @@ void printDatabase(CarContainer* container) {
     }
 }
 
-CarContainer* createDatabase() {
+CarContainer* createDatabase(char *databaseName) {
     CarContainer* container = (CarContainer*)malloc(sizeof(CarContainer));
-
+    
+    //create new database character array to store filename
+    char *database = malloc(strlen(databaseName) + 5);
+    strcpy(database, databaseName);
+    
+    // Append ".txt"
+    strcat(database, ".txt");
+    
 	container->size = 0;
 
-    //Enter Database file name
-	char *database = "car_inventory.txt";	
 	FILE *fp = fopen(database, "r");
 	char c;
 
@@ -84,3 +89,16 @@ CarContainer* createDatabase() {
 	return container;
 	//freeDatabase(container);
 }
+
+/*
+* TEST CASE
+* 
+int main () {
+    char *str = "car_inventory";
+    CarContainer* cars = createDatabase(str);
+    printDatabase(cars);
+    freeDatabase(cars);
+    return 0;
+}
+
+*/
