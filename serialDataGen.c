@@ -15,55 +15,55 @@
 
 // Constant array of car models
 const char* car_models[NUM_MODELS] = {
-    "Accord", "Civic", "Corolla", "Camry", "Mustang", "F-150", "Silverado", "Ram 1500", "Tacoma", "Explorer",
-    "Escape", "Rogue", "Altima", "Sentra", "Pathfinder", "Highlander", "Pilot", "CR-V", "CX-5", "Forester",
-    "Outback", "Impreza", "Cherokee", "Wrangler", "Grand Cherokee", "Model 3", "Model S", "Model X", "Model Y",
-    "Leaf", "Bolt EV", "Blazer", "Equinox", "Traverse", "Tahoe", "Malibu", "Fusion", "Focus", "Edge", "Expedition",
-    "Avalon", "Prius", "4Runner", "Land Cruiser", "Sierra 1500", "Sierra 2500", "Ranger", "Titan", "Maverick",
-    "Frontier", "X5", "X3", "Q5", "A4", "A6", "Q7", "RX 350", "ES 350", "NX 300", "IS 300", "GX 460",
-    "MDX", "TLX", "ILX", "RDX", "Encore", "Envision", "Regal", "Velar", "Range Rover", "Discovery", "XC90",
-    "XC60", "S60", "V60", "Tiguan", "Atlas", "Golf", "Passat", "Jetta", "GLC", "GLE", "C-Class", "E-Class",
-    "S-Class", "Macan", "Cayenne", "Outlander", "Mirage", "Telluride", "Sorento", "Soul", "Forte", "K5",
-    "Elantra", "Sonata", "Tucson", "Santa Fe", "Rio", "Stinger", "Optima", "Genesis G70", "Genesis G80",
-    "Genesis G90", "Spark", "Impala", "Sonic", "Cruze", "Trax", "Captiva", "Avalon", "Corvette", "Venza",
-    "RAV4", "Sequoia", "Tundra", "Matrix", "Yaris", "Crosstrek", "Ascent", "Palisade", "Venue", "Ioniq",
-    "Niro", "Kona", "Santa Cruz", "Q3", "A3", "A5", "A7", "Q8", "TT", "R8", "XC40", "XC70", "S90", "V90",
-    "GLA", "GLB", "GLS", "CLA", "SLK", "AMG GT", "F-Type", "XJ", "XF", "XE", "E-Pace", "I-Pace", "F-Pace",
-    "DB11", "DBX", "Vantage", "Rapide", "Ghost", "Phantom", "Wraith", "Cullinan", "Bentayga", "Continental GT",
-    "Mulsanne", "Cayman", "911", "Panamera", "Aventador", "Huracan", "Urus", "Chiron", "Veyron", "Enzo", 
-    "F12", "488 GTB", "812 Superfast", "Portofino", "Roma", "FF", "Vanquish", "CTS", "CT5", "XT4", "XT5",
-    "XT6", "Escalade", "SRX", "Aviator", "Navigator", "MKC", "MKZ", "MKT", "Corsair", "GLK", "Qashqai",
-    "Murano", "Maxima", "Armada", "Versa", "500X", "500L", "Giulia", "Stelvio", "Levante", "Ghibli", "Quattroporte",
-    "MC20", "Kizashi", "Vitara", "Celerio", "Jimny", "Swift", "Baleno", "Ertiga", "School Bus", "Ambulance", "M1 Abrams",
-    "Jing-Mobile", "Batmobile", "The Mystery Machine", "The Invisible Boatmobile", "Ice Cream Truck", "Wienermobile",
-    "DeLorean", "Ecto-1", "Lada", "The Magic School Bus", "Lightning McQueen (Kachow)"
+    "accord", "civic", "corolla", "camry", "mustang", "f-150", "silverado", "ram 1500", "tacoma", "explorer",
+    "escape", "rogue", "altima", "sentra", "pathfinder", "highlander", "pilot", "cr-v", "cx-5", "forester",
+    "outback", "impreza", "cherokee", "wrangler", "grand cherokee", "model 3", "model s", "model x", "model y",
+    "leaf", "bolt ev", "blazer", "equinox", "traverse", "tahoe", "malibu", "fusion", "focus", "edge", "expedition",
+    "avalon", "prius", "4runner", "land cruiser", "sierra 1500", "sierra 2500", "ranger", "titan", "maverick",
+    "frontier", "x5", "x3", "q5", "a4", "a6", "q7", "rx 350", "es 350", "nx 300", "is 300", "gx 460",
+    "mdx", "tlx", "ilx", "rdx", "encore", "envision", "regal", "velar", "range rover", "discovery", "xc90",
+    "xc60", "s60", "v60", "tiguan", "atlas", "golf", "passat", "jetta", "glc", "gle", "c-class", "e-class",
+    "s-class", "macan", "cayenne", "outlander", "mirage", "telluride", "sorento", "soul", "forte", "k5",
+    "elantra", "sonata", "tucson", "santa fe", "rio", "stinger", "optima", "genesis g70", "genesis g80",
+    "genesis g90", "spark", "impala", "sonic", "cruze", "trax", "captiva", "avalon", "corvette", "venza",
+    "rav4", "sequoia", "tundra", "matrix", "yaris", "crosstrek", "ascent", "palisade", "venue", "ioniq",
+    "niro", "kona", "santa cruz", "q3", "a3", "a5", "a7", "q8", "tt", "r8", "xc40", "xc70", "s90", "v90",
+    "gla", "glb", "gls", "cla", "slk", "amg gt", "f-type", "xj", "xf", "xe", "e-pace", "i-pace", "f-pace",
+    "db11", "dbx", "vantage", "rapide", "ghost", "phantom", "wraith", "cullinan", "bentayga", "continental gt",
+    "mulsanne", "cayman", "911", "panamera", "aventador", "huracan", "urus", "chiron", "veyron", "enzo",
+    "f12", "488 gtb", "812 superfast", "portofino", "roma", "ff", "vanquish", "cts", "ct5", "xt4", "xt5",
+    "xt6", "escalade", "srx", "aviator", "navigator", "mkc", "mkz", "mkt", "corsair", "glk", "qashqai",
+    "murano", "maxima", "armada", "versa", "500x", "500l", "giulia", "stelvio", "levante", "ghibli", "quattroporte",
+    "mc20", "kizashi", "vitara", "celerio", "jimny", "swift", "baleno", "ertiga", "school bus", "ambulance", "m1 abrams",
+    "jing-mobile", "batmobile", "the mystery machine", "the invisible boatmobile", "ice cream truck", "wienermobile",
+    "delorean", "ecto-1", "lada", "the magic school bus", "lightning mcqueen (kachow)"
 };
 
 // Constant array of car dealers
 const char* car_dealers[NUM_DEALERS] = {
-    "Smith Auto", "Classic Motors", "Pioneer Cars", "City Auto Sales", "Peak Automotive", "Valley View Cars",
-    "Sunny Road Motors", "Greenfield Dealership", "Elite Autos", "Sunrise Car Co.", "Prime Vehicles", "Power Motors",
-    "North Side Autos", "Westside Cars", "Autoland", "Riverside Auto Group", "Mega Auto Sales", "Easy Drive Autos",
-    "Budget Cars", "Premier Car Sales", "All-Wheel Autos", "Smooth Ride Autos", "Superb Motors", "Champion Motors",
-    "Prime Choice Motors", "Econo Autos", "Greenway Cars", "East Side Car Co.", "Right Choice Autos", "Best Buy Autos",
-    "Metro Car Dealers", "Family Drive Autos", "Zoom Cars", "Sunshine Auto Sales", "Parkside Motors", "Top Gear Autos",
-    "All Seasons Motors", "Central Auto Sales", "Value Cars", "Blue Horizon Autos", "Redline Motors", "Luxury Motors",
-    "Highland Auto Sales", "Big City Autos", "National Car Sales", "City Center Autos", "Smart Choice Cars",
-    "Roadmaster Auto", "Ultimate Ride Autos", "Fairway Car Sales", "South Side Autos", "Sunset Motors",
-    "Prestige Autos", "Downtown Motors", "Eagle Motors", "Titan Auto", "High Performance Autos", "Speedway Motors",
-    "Drive Right Cars", "Select Cars", "Auto Superstore", "Motor Plaza", "Auto Gallery", "Easy Choice Autos",
-    "Reliable Ride Autos", "Adventure Motors", "Uptown Auto", "Victory Auto", "Ace Autos", "Fast Track Cars",
-    "Reliable Autos", "Next Car Dealership", "Big Deal Autos", "Pro Auto Sales", "Dependable Car Sales",
-    "Journey Motors", "Value Ride Autos", "Elite Car Deals", "Premium Autos", "Legacy Auto Sales", "Superior Motors",
-    "Pro Choice Autos", "Green Auto Sales", "Urban Autos", "Choice Ride Autos", "Grand Motors", "Royal Motors",
-    "Economy Autos", "Auto Nation", "Dynamic Motors", "Optimum Autos", "Trusty Motors", "Golden Motors",
-    "Modern Autos", "Galaxy Car Sales", "East End Motors", "Westward Motors", "Auto Palace", "River Auto", "Auto Haven"
+    "smith auto", "classic motors", "pioneer cars", "city auto sales", "peak automotive", "valley view cars",
+    "sunny road motors", "greenfield dealership", "elite autos", "sunrise car co.", "prime vehicles", "power motors",
+    "north side autos", "westside cars", "autoland", "riverside auto group", "mega auto sales", "easy drive autos",
+    "budget cars", "premier car sales", "all-wheel autos", "smooth ride autos", "superb motors", "champion motors",
+    "prime choice motors", "econo autos", "greenway cars", "east side car co.", "right choice autos", "best buy autos",
+    "metro car dealers", "family drive autos", "zoom cars", "sunshine auto sales", "parkside motors", "top gear autos",
+    "all seasons motors", "central auto sales", "value cars", "blue horizon autos", "redline motors", "luxury motors",
+    "highland auto sales", "big city autos", "national car sales", "city center autos", "smart choice cars",
+    "roadmaster auto", "ultimate ride autos", "fairway car sales", "south side autos", "sunset motors",
+    "prestige autos", "downtown motors", "eagle motors", "titan auto", "high performance autos", "speedway motors",
+    "drive right cars", "select cars", "auto superstore", "motor plaza", "auto gallery", "easy choice autos",
+    "reliable ride autos", "adventure motors", "uptown auto", "victory auto", "ace autos", "fast track cars",
+    "reliable autos", "next car dealership", "big deal autos", "pro auto sales", "dependable car sales",
+    "journey motors", "value ride autos", "elite car deals", "premium autos", "legacy auto sales", "superior motors",
+    "pro choice autos", "green auto sales", "urban autos", "choice ride autos", "grand motors", "royal motors",
+    "economy autos", "auto nation", "dynamic motors", "optimum autos", "trusty motors", "golden motors",
+    "modern autos", "galaxy car sales", "east end motors", "westward motors", "auto palace", "river auto", "auto haven"
 };
 
 // Constant array of car colors
 const char* car_colors[NUM_COLORS] = {
-    "Black", "White", "Gray", "Silver", "Blue", "Red", "Green", "Yellow", "Brown", "Orange",
-    "Gold", "Beige", "Purple", "Maroon", "Cyan"
+    "black", "white", "gray", "silver", "blue", "red", "green", "yellow", "brown", "orange",
+    "gold", "beige", "purple", "maroon", "cyan"
 };
 
 
