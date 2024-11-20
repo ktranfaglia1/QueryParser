@@ -86,7 +86,7 @@ void generate_car_inventory(const char* filename, int num_cars) {
     srand(time(NULL));  // Seed the random number generator
 
     // Generate desired amount of data entries for the car inventory file
-    #pragma omp parallel for schedule(dynamic)
+    #pragma omp parallel for schedule(static)
     for (int i = 1; i <= num_cars; i++) {
 
         // Randomly select model, dealer, and color using the prefixed arrays

@@ -1,16 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "structstack.h"
-
-typedef struct StackNode {
-    void* data;  
-    struct StackNode* next;
-} StackNode;
-
-typedef struct {
-    StackNode* top;
-} Stack;
+#include "structStack.h"
 
 void initStack(Stack* stack) {
     stack->top = NULL;
