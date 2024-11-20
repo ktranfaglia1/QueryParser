@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h> 
-#include "stringstack.h"
+#include "stringStack.h"
 
 void initStack(Stack* stack) {
     stack->top = NULL;
