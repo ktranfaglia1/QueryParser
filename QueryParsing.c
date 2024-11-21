@@ -24,7 +24,7 @@ typedef struct opTuple{
  * @param argc {int} This is the number of strings being taken in to concatenate
  * @param argv {char**} This is the strings being concatenated together
  * 
- * @return concatString the combined String
+ * @return {char*} concatString the combined String
  */
 char* concatInput(int argc, char** argv){
     int strSize = 0;
@@ -42,7 +42,6 @@ char* concatInput(int argc, char** argv){
 
         for(int j = 0; j < strlen(argv[i]); j++, count++){
             concatString[count] = argv[i][j];
-            //printf("%c", concatString[count]);
         }
         concatString[count] = ' ';
         count++;
@@ -58,6 +57,12 @@ char* concatInput(int argc, char** argv){
  * 
  * @param database {CarContainer*} Complete Database includes everything inside of the file
  * @param inFixOperations {opTuple*} contains array of operations in InFix Notation
+ * 
+ * :: OPERATIONS ::
+ * @see find_all(), intersect_arrays(), union_arrays()
+ * 
+ * 
+ * @return {CarContainer*} New Reduced Database
  */
 CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
     Stack* dataStack;
@@ -66,12 +71,26 @@ CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
 
     for(int i = 1; i < atoi(inFixOperations[0].dataType);i++){
         if(strcmp(inFixOperations[i].dataType, 'AND')){
-            CarContainer* intersectData = intersect_arrays(pop(dataStack), pop(dataStack));
+
+            CarContainer* database1 = pop(dataStack);
+            CarContainer* database2 = pop(dataStack);
+
+            CarContainer* intersectData = intersect_arrays(database1, database2);
             push(dataStack, intersectData, sizeof(intersectData));
+
+            freeDatabase(database1);
+            freeDatabase(database2);
         }
         else if(strcmp(inFixOperations[i].dataType, 'OR')){
-            CarContainer* unionData =  union_arrays(pop(dataStack), pop(dataStack));
+            
+            CarContainer* database1 = pop(dataStack);
+            CarContainer* database2 = pop(dataStack);
+
+            CarContainer* unionData =  union_arrays(database1, database2);
             push(dataStack, unionData, sizeof(unionData));
+
+            freeDatabase(database1);
+            freeDatabase(database2);
         } else{
             CarContainer* newData =  find_all(database, inFixOperations[i].dataType, inFixOperations[i].condition, inFixOperations[i].object);
             push(dataStack, newData, sizeof(newData)); 
