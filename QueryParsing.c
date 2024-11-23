@@ -61,11 +61,13 @@ char* concatInput(int argc, char** argv){
  * :: OPERATIONS ::
  * @see find_all(), intersect_arrays(), union_arrays()
  * 
+ * TODO: Convert Find All condition and object to Kyles enum
  * 
  * @return {CarContainer*} New Reduced Database
  */
 CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
-    Stack* dataStack;
+    Stack actualStack;
+    Stack* dataStack = &actualStack;
     initStack(dataStack);
 
 
@@ -92,7 +94,7 @@ CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
             freeDatabase(database1);
             freeDatabase(database2);
         } else{
-            CarContainer* newData =  find_all(database, inFixOperations[i].dataType, inFixOperations[i].condition, inFixOperations[i].object);
+            CarContainer* newData =  find_all(database, inFixOperations[i].object, opToEnum(inFixOperations[i].condition), strToObject(inFixOperations[i].dataType));
             push(dataStack, newData, sizeof(newData)); 
         }
     }
@@ -101,4 +103,66 @@ CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
     destroyStack(dataStack);
 
     return finalResult;
+}
+
+
+/**
+ * @brief Converts a string containing the string version of operation to kyles actual operation ENUM
+ * 
+ * @param {char*} opString The actual string being Converted
+ * 
+ * @return {ComparisonOperation} New enum based Operation
+ */
+
+ComparisonOperation opToEnum(char* opString){
+    ComparisonOperation comparOP;
+
+
+    if (strcmp(opString, "<=") == 0){
+        comparOP = GREATER_EQUAL;
+    } else if(strcmp(opString, ">=") == 0){
+        comparOP = LESS_EQUAL;
+    }else if(strcmp(opString, ">") == 0){
+        comparOP = LESS_THAN;
+    } else if(strcmp(opString, "<") == 0){
+        comparOP = GREATER_THAN;
+    } else if(strcmp(opString, "!=") == 0){
+        comparOP = NOT_EQUAL_TO;
+    } else{
+        comparOP = EQUAL_TO;
+    }
+
+
+
+    return comparOP;
+}
+
+/**
+ * @brief Converts a string containing the string version of operation to kyles actual operation ENUM
+ * 
+ * @param {char*} opString The actual string being Converted
+ * 
+ * @return {ComparisonObject} New enum based Object
+ */
+ComparisonObject strToObject(char* opString){
+    ComparisonObject finalObject;
+
+    if (strcmp(opString, "ID") == 0){
+        finalObject = ID;
+    } else if (strcmp(opString, "MODEL") == 0){
+        finalObject = MODEL;
+    }  else if (strcmp(opString, "MAKE") == 0){
+        finalObject = MAKE;
+    }  else if (strcmp(opString, "COLOR") == 0){
+        finalObject = COLOR;
+    }  else if (strcmp(opString, "PRICE") == 0){
+        finalObject = PRICE;
+    }  else{
+        finalObject = DEALER;
+    } 
+    
+
+
+
+    return finalObject;
 }
