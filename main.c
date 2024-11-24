@@ -8,6 +8,8 @@ int main(int argc, char** argv) {
     //Turns Parameter into Parsed Array
     char*** parameters = getParams(argc, argv); 
 
+    printf("Test: %s\n", parameters[1][1]);
+
     //Select Command Runs 
     CarContainer* database = createDatabase(parameters[1][1]);
 
