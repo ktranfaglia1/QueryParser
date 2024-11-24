@@ -1,21 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-
-typedef struct Car {
-	int ID;
-	char* Model;
-	int YearMake;
-	char* Color;
-	int Price;
-	char* Dealer;
-} Car;
-
-typedef struct CarContainer {
-	int size;
-	Car *array;
-} CarContainer;
+#include "theDatabaser.h"
 
 void freeDatabase(CarContainer* container) {
     for (int i = 0; i < container->size; i++) {

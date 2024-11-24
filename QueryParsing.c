@@ -5,7 +5,8 @@
 #include "structStack.h"
 
 
-/**
+/**  
+ * \struct opTuple
  * @brief this is the data structure oriented at holding operations to be executed
  * @param dataType type{char*} This is the column to take from ex. "Year" , "Model" ...
  * @param object type{char*} this is the actual cars information ex. "2016" "Accord" ...
@@ -19,6 +20,7 @@ typedef struct opTuple{
 
 
 /**
+ * \fn concatInput
  * @brief is the function which takes the command line inputs and turns them into 1 string for parsing
  * 
  * @param argc {int} This is the number of strings being taken in to concatenate
@@ -53,15 +55,13 @@ char* concatInput(int argc, char** argv){
 
 
 /**
+ * \fn callOperations
  * @brief Loops through array of InFix Operations to be called for Where Command
  * 
  * @param database {CarContainer*} Complete Database includes everything inside of the file
  * @param inFixOperations {opTuple*} contains array of operations in InFix Notation
  * 
- * :: OPERATIONS ::
  * @see find_all(), intersect_arrays(), union_arrays()
- * 
- * TODO: Convert Find All condition and object to Kyles enum
  * 
  * @return {CarContainer*} New Reduced Database
  */
@@ -107,13 +107,13 @@ CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
 
 
 /**
+ * \fn callOperations
  * @brief Converts a string containing the string version of operation to kyles actual operation ENUM
  * 
- * @param {char*} opString The actual string being Converted
+ * @param opString {char*}  The actual string being Converted
  * 
  * @return {ComparisonOperation} New enum based Operation
  */
-
 ComparisonOperation opToEnum(char* opString){
     ComparisonOperation comparOP;
 
@@ -138,9 +138,10 @@ ComparisonOperation opToEnum(char* opString){
 }
 
 /**
+ * \fn
  * @brief Converts a string containing the string version of operation to kyles actual operation ENUM
  * 
- * @param {char*} opString The actual string being Converted
+ * @param opString {char*}  The actual string being Converted
  * 
  * @return {ComparisonObject} New enum based Object
  */
