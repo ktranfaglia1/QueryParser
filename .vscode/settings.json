@@ -2,7 +2,7 @@
     "files.associations": {
         "stdio.h": "c",
         "stdlib.h": "c",
-        "thedatabaser.c": "cpp",
+        "thedatabaser.c": "c",
         "queryparsing.h": "c",
         "string.h": "c",
         "thedatabaser.h": "c"

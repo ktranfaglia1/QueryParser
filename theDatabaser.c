@@ -1,5 +1,4 @@
-#ifndef THE_DATABASER
-#define THE_DATABASER
+
 
 
 #include <stdio.h>
@@ -95,4 +94,3 @@ int main () {
 
 */
 
-#endif

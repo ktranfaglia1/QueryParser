@@ -4,8 +4,6 @@
 #include "QueryParsing.h"
 
 
-#ifndef QUERYPARSING
-#define QUERYPARSING
 /**
  * \fn concatInput
  * @brief is the function which takes the command line inputs and turns them into 1 string for parsing
@@ -154,5 +152,3 @@ ComparisonObject strToObject(char* opString){
 
     return finalObject;
 }
-
-#endif

@@ -4,8 +4,6 @@
 *  This program contains search utility functions to return a list of all entires that meet a certain criteria
 */
 
-#ifndef SEARCHUTILITY
-#define SEARCHUTILITY
 
 
 #include "searchUtility.h"
@@ -144,4 +142,3 @@ CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
 }
 
 
-#endif
