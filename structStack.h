@@ -1,20 +1,20 @@
 #ifndef STRUCTSTACK_H
 #define STRUCTSTACK_H
 
-typedef struct StackNode {
+typedef struct structStackNode {
     char* data;          
-    struct StackNode* next; 
-} StackNode;
+    struct structStackNode* next; 
+} structStackNode;
 
 typedef struct {
-    StackNode* top; 
-} Stack;
+    structStackNode* top; 
+} structStack;
 
-void initStack(Stack* stack);
-void push(Stack* stack, void* value, size_t size);
-void* pop(Stack* stack);
-void* peek(const Stack* stack);
-int isEmpty(const Stack* stack);
-void destroyStack(Stack* stack);
+void initStructStack(structStack* stack);
+void structPush(structStack* stack, void* value, size_t size);
+void* structPop(structStack* stack);
+void* structPeek(const structStack* stack);
+int isStructEmpty(const structStack* stack);
+void destroyStructStack(structStack* stack);
 
 #endif 

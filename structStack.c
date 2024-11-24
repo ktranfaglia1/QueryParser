@@ -3,12 +3,14 @@
 #include <string.h>
 #include "structStack.h"
 
-void initStack(Stack* stack) {
+
+
+void initStructStack(structStack* stack) {
     stack->top = NULL;
 }
 
-void push(Stack* stack, void* value, size_t size) {
-    StackNode* newNode = (StackNode*)malloc(sizeof(StackNode));
+void structPush(structStack* stack, void* value, size_t size) {
+    structStackNode* newNode = (structStackNode*)malloc(sizeof(structStackNode));
     if (!newNode) {
         fprintf(stderr, "Memory allocation failed!\n");
         exit(1);
@@ -26,20 +28,20 @@ void push(Stack* stack, void* value, size_t size) {
     stack->top = newNode;
 }
 
-void* pop(Stack* stack) {
+void* structPop(structStack* stack) {
     if (stack->top == NULL) {
         fprintf(stderr, "Stack underflow: The stack is empty!\n");
         exit(1);
     }
 
-    StackNode* temp = stack->top;
+    structStackNode* temp = stack->top;
     void* value = temp->data; 
     stack->top = stack->top->next;
     free(temp);  
     return value;  
 }
 
-void* peek(const Stack* stack) {
+void* structPeek(const structStack* stack) {
     if (stack->top == NULL) {
         fprintf(stderr, "Stack is empty!\n");
         exit(1);
@@ -47,13 +49,13 @@ void* peek(const Stack* stack) {
     return stack->top->data; 
 }
 
-int isEmpty(const Stack* stack) {
+int isStructEmpty(const structStack* stack) {
     return stack->top == NULL;
 }
 
-void destroyStack(Stack* stack) {
-    while (!isEmpty(stack)) {
-        void* data = pop(stack);
+void destroyStructStack(structStack* stack) {
+    while (!isStructEmpty(stack)) {
+        void* data = structPop(stack);
         free(data); 
     }
 }

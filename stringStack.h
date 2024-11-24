@@ -6,7 +6,7 @@ typedef struct StackNode {
     struct StackNode* next; 
 } StackNode;
 
-typedef struct {
+typedef struct Stack{
     StackNode* top; 
 } Stack;
 

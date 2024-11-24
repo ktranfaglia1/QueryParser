@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "theDatabaser.c"
+#include "theDatabaser.h"
 
 // Comparison operations
 typedef enum {

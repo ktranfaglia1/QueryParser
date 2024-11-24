@@ -1,11 +1,13 @@
 CC=gcc
 
 
-OBJS=main.o parse.o searchUtility.o stringStack.o structStack.o theDatabaser.o
+OBJS=main.o parse.o QueryParsing.o searchUtility.o theDatabaser.o stringStack.o structStack.o
 
 SerialDataBase: $(OBJS)
 	$(CC) -o $@ $^
 
+%.o: %.c %.h
+	$(CC) -c -o $@ $<
 
 .PHONY: clean
 

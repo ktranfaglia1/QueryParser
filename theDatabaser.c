@@ -1,7 +1,13 @@
+#ifndef THE_DATABASER
+#define THE_DATABASER
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "theDatabaser.h"
+
+
 
 void freeDatabase(CarContainer* container) {
     for (int i = 0; i < container->size; i++) {
@@ -88,3 +94,5 @@ int main () {
 }
 
 */
+
+#endif

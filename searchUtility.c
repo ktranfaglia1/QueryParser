@@ -3,6 +3,11 @@
 *  Last updated 11/18/24
 *  This program contains search utility functions to return a list of all entires that meet a certain criteria
 */
+
+#ifndef SEARCHUTILITY
+#define SEARCHUTILITY
+
+
 #include "searchUtility.h"
 
 // Generalized filter function to return a filtered CarContainer
@@ -137,3 +142,6 @@ CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
     }
     return result;
 }
+
+
+#endif

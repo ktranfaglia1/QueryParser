@@ -1,11 +1,12 @@
-#include "theDatabaser.c"
-#include "QueryParsing.c"
+#include "theDatabaser.h"
+#include "QueryParsing.h"
+#include "parse.h"
 
 
 int main(int argc, char** argv) {
     
     //Turns Parameter into Parsed Array
-    char*** parameters = getParams(); 
+    char*** parameters = getParams(argc, argv); 
 
     //Select Command Runs 
     CarContainer* database = createDatabase(parameters[1][1]);

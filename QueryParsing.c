@@ -1,24 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "searchUtility.c"
-#include "structStack.h"
+#include "QueryParsing.h"
 
 
-/**  
- * \struct opTuple
- * @brief this is the data structure oriented at holding operations to be executed
- * @param dataType type{char*} This is the column to take from ex. "Year" , "Model" ...
- * @param object type{char*} this is the actual cars information ex. "2016" "Accord" ...
- * @param condition type{char*} specific operations to determine the array ex. >= < =
- */
-typedef struct opTuple{
-    char* dataType;
-    char* object;
-    char* condition;
-} opTuple;
-
-
+#ifndef QUERYPARSING
+#define QUERYPARSING
 /**
  * \fn concatInput
  * @brief is the function which takes the command line inputs and turns them into 1 string for parsing
@@ -66,41 +53,41 @@ char* concatInput(int argc, char** argv){
  * @return {CarContainer*} New Reduced Database
  */
 CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
-    Stack actualStack;
-    Stack* dataStack = &actualStack;
-    initStack(dataStack);
+    structStack actualStack;
+    structStack* dataStack = &actualStack;
+    initStructStack(dataStack);
 
 
     for(int i = 1; i < atoi(inFixOperations[0].dataType);i++){
-        if(strcmp(inFixOperations[i].dataType, 'AND')){
+        if(strcmp(inFixOperations[i].dataType, "AND")){
 
-            CarContainer* database1 = pop(dataStack);
-            CarContainer* database2 = pop(dataStack);
+            CarContainer* database1 = structPop(dataStack);
+            CarContainer* database2 = structPop(dataStack);
 
             CarContainer* intersectData = intersect_arrays(database1, database2);
-            push(dataStack, intersectData, sizeof(intersectData));
+            structPush(dataStack, intersectData, sizeof(intersectData));
 
             freeDatabase(database1);
             freeDatabase(database2);
         }
-        else if(strcmp(inFixOperations[i].dataType, 'OR')){
+        else if(strcmp(inFixOperations[i].dataType, "OR")){
             
-            CarContainer* database1 = pop(dataStack);
-            CarContainer* database2 = pop(dataStack);
+            CarContainer* database1 = structPop(dataStack);
+            CarContainer* database2 = structPop(dataStack);
 
             CarContainer* unionData =  union_arrays(database1, database2);
-            push(dataStack, unionData, sizeof(unionData));
+            structPush(dataStack, unionData, sizeof(unionData));
 
             freeDatabase(database1);
             freeDatabase(database2);
         } else{
             CarContainer* newData =  find_all(database, inFixOperations[i].object, opToEnum(inFixOperations[i].condition), strToObject(inFixOperations[i].dataType));
-            push(dataStack, newData, sizeof(newData)); 
+            structPush(dataStack, newData, sizeof(newData)); 
         }
     }
 
-    CarContainer* finalResult = pop(dataStack);
-    destroyStack(dataStack);
+    CarContainer* finalResult = structPop(dataStack);
+    destroyStructStack(dataStack);
 
     return finalResult;
 }
@@ -167,3 +154,5 @@ ComparisonObject strToObject(char* opString){
 
     return finalObject;
 }
+
+#endif

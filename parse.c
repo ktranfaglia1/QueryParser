@@ -1,17 +1,14 @@
 //Timothy McKirgan
 //11/18/2024
 //COSC 420
- 
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "stringStack.h"
+#include "parse.h"
 
-typedef struct opTuple{
-    char* dataType;
-    char* object;
-    char* condition;
-} opTuple;
 
 char** getArgStrings(int argc, char** argv) {
     //Initialize the count storing the size of query for Select, From, and Where keywords

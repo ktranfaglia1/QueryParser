@@ -15,4 +15,12 @@ typedef struct CarContainer {
 	Car *array;
 } CarContainer;
 
+
+//Function Prototypes
+void freeDatabase(CarContainer* container);
+void printDatabase(CarContainer* container);
+CarContainer* createDatabase(char *databaseName);
+
+
+
 #endif
