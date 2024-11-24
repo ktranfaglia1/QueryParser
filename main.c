@@ -8,16 +8,21 @@ int main(int argc, char** argv) {
     //Turns Parameter into Parsed Array
     char*** parameters = getParams(argc, argv); 
 
-    printf("Test: %s\n", parameters[1][1]);
 
     //Select Command Runs 
     CarContainer* database = createDatabase(parameters[1][1]);
 
+    
+
     //Converts Operations to postFix
     opTuple* postFix = where(parameters[2]);
 
+    
+
     //Runs Operations Accordingly
-    database = callOperations(database, postFix);
+    database = callOperations(database, postFix); //ITS BROKEN AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH!!!!!!!!!!!!!!!!
+
+    printf("TEST\n");
 
     //Outputs Database with proper columns
     printDatabase(database);

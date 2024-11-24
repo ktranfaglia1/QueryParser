@@ -1,0 +1,1 @@
+./SerialDataBase $(cat SQLCommand.txt)
