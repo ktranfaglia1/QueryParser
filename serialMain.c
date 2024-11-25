@@ -21,6 +21,13 @@ int main(int argc, char** argv) {
 
         //Converts Operations to postFix
         opTuple* postFix = where(parameters[i * 3 + 2]);
+        for (int f = 1; f < atoi(postFix[0].dataType); f++) {
+            printf("(");
+            printf("%s, ", postFix[f].dataType);
+            printf("%s, ", postFix[f].object);
+            printf("%s)\n", postFix[f].condition);
+        }
+        printf("\n");
 
         
 

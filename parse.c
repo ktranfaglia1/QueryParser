@@ -233,6 +233,12 @@ char** getCSVs(char* inputString) {
             pospos++;
         }
     }
+    /*
+    for (int i = 1; i < atoi(csv[0]); i++) {
+        printf("%s, ", csv[i]);
+    }
+    printf("\n");
+    */
     return csv;
 }
 
@@ -356,6 +362,12 @@ char** getOpers(char* inputString) {
             pospos++;
         }
     }
+    /*
+    for (int i = 1; i < atoi(opp[0]); i++) {
+        printf("%s, ", opp[i]);
+    }
+    printf("\n");
+    */
     return opp;
 }
 
@@ -367,22 +379,21 @@ char*** getParams(int argc, char** argv, int* size) {
         parameters[0 + (i * 3)] = getCSVs(inputStrings[0 + (i * 3)]);
         parameters[1 + (i * 3)] = getCSVs(inputStrings[1 + (i * 3)]);
         parameters[2 + (i * 3)] = getOpers(inputStrings[2 + (i * 3)]);
-        //Printing input strings
-        printf("%d: %s\n", 0 + (i * 3), inputStrings[0 + (i * 3)]);
-        printf("%d: %s\n", 1 + (i * 3), inputStrings[1 + (i * 3)]);
-        printf("%d: %s\n", 2 + (i * 3), inputStrings[2 + (i * 3)]);
         //Printing select
-        for (int f = 1; i < atoi(parameters[0 + (i * 3)][0]); f++) {
+        for (int f = 1; f < atoi(parameters[0 + (i * 3)][0]); f++) {
             printf("%s, ", parameters[0 + (i * 3)][f]);
         }
+        printf("\n");
         //Printinf from
-        for (int f = 1; i < atoi(parameters[1 + (i * 3)][0]); f++) {
+        for (int f = 1; f < atoi(parameters[1 + (i * 3)][0]); f++) {
             printf("%s, ", parameters[1 + (i * 3)][f]);
         }
+        printf("\n");
         //Printinf where
-        for (int f = 1; i < atoi(parameters[2 + (i * 3)][0]); f++) {
+        for (int f = 1; f < atoi(parameters[2 + (i * 3)][0]); f++) {
             printf("%s, ", parameters[2 + (i * 3)][f]);
         }
+        printf("\n");
     }
     freeArgStrings(inputStrings, *size);
     return parameters;
