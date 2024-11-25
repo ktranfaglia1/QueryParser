@@ -55,11 +55,32 @@ void printDatabase(CarContainer* container, char** params) {
 
 void shortPrintDatabase(CarContainer* container, char** params) {
     for (int i = 0; i < 10; i++) {
-        printf("%s,", container->array[i].Model);
-        printf("%d,",container->array[i].YearMake);
-        printf("%s,",container->array[i].Color);
-        printf("%d,",container->array[i].Price);
-        printf("%s,",container->array[i].Dealer);
+        for(int pIndex = 1; pIndex < atoi(params[0]); pIndex++)
+        {
+            switch (strToObject(params[pIndex]))
+            {
+            case ID:
+                printf("%d,", container->array[i].ID);
+                break;
+            case MODEL:
+                printf("%s,", container->array[i].Model);
+                break;
+            case COLOR:
+                printf("%s,",container->array[i].Color);
+                break;
+            case MAKE:
+                printf("%d,",container->array[i].YearMake);
+                break;
+            case PRICE:
+                printf("%d,",container->array[i].Price);
+                break;
+            case DEALER:
+                printf("%s,",container->array[i].Dealer);
+                break;
+            default:
+                break;
+            }
+        }
         printf("\n");
     }
 }
