@@ -1,5 +1,5 @@
-#ifndef PARALLELSEARCHUTILITY_H
-#define PARALLELSEARCHUTILITY_H
+#ifndef SEARCHUTILITYOMP_H
+#define SEARCHUTILITYOMP_H
 
 #include <stdio.h>
 #include <stdlib.h>
