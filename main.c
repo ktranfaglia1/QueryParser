@@ -20,9 +20,8 @@ int main(int argc, char** argv) {
     
 
     //Runs Operations Accordingly
-    database = callOperations(database, postFix); //ITS BROKEN AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH!!!!!!!!!!!!!!!!
+    database = callOperations(database, postFix); 
 
-    printf("TEST\n");
 
     //Outputs Database with proper columns
     printDatabase(database);

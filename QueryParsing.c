@@ -69,36 +69,34 @@ CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
     structStack* dataStack = &actualStack;
     initStructStack(dataStack);
 
+    CarContainer* database1;
+    CarContainer* database2;
+
     for(int i = 1; i < atoi(inFixOperations[0].dataType);i++){
         if(strcmp(inFixOperations[i].dataType, "AND") == 0){
 
-            CarContainer* database1 = structPop(dataStack);
-            CarContainer* database2 = structPop(dataStack);
+            database1 = structPop(dataStack);
+            database2 = structPop(dataStack);
 
             CarContainer* intersectData = intersect_arrays(database1, database2);
             structPush(dataStack, intersectData, sizeof(*intersectData));
-
-            freeDatabase(database1);
-            freeDatabase(database2);
         }
         else if(strcmp(inFixOperations[i].dataType, "OR") == 0){
-            
-            CarContainer* database1 = structPop(dataStack);
-            CarContainer* database2 = structPop(dataStack);
+            database1 = structPop(dataStack);
+            database2 = structPop(dataStack);
 
             CarContainer* unionData =  union_arrays(database1, database2);
             structPush(dataStack, unionData, sizeof(*unionData));
 
-            freeDatabase(database1);
-            freeDatabase(database2);
         } else{
-            CarContainer* newData =  find_all(database, inFixOperations[i].object, opToEnum(inFixOperations[i].condition), strToObject(inFixOperations[i].dataType));
+            ComparisonObject dataType = strToObject(inFixOperations[i].dataType);
+            CarContainer* newData =  find_all(database, objectToDataType(inFixOperations[i].object, dataType), opToEnum(inFixOperations[i].condition), dataType);
             structPush(dataStack, newData, sizeof(*newData)); 
         }
     }
 
     CarContainer* finalResult = structPop(dataStack);
-    freeDatabase(database);
+    //freeDatabase(database);
     destroyStructStack(dataStack);
 
     return finalResult;
@@ -149,13 +147,13 @@ ComparisonObject strToObject(char* opString){
 
     if (strcmp(opString, "ID") == 0){
         finalObject = ID;
-    } else if (strcmp(opString, "MODEL") == 0){
+    } else if (strcmp(opString, "Model") == 0){
         finalObject = MODEL;
-    }  else if (strcmp(opString, "MAKE") == 0){
+    }  else if (strcmp(opString, "YearMake") == 0){
         finalObject = MAKE;
-    }  else if (strcmp(opString, "COLOR") == 0){
+    }  else if (strcmp(opString, "Color") == 0){
         finalObject = COLOR;
-    }  else if (strcmp(opString, "PRICE") == 0){
+    }  else if (strcmp(opString, "Price") == 0){
         finalObject = PRICE;
     }  else{
         finalObject = DEALER;
@@ -165,4 +163,27 @@ ComparisonObject strToObject(char* opString){
 
 
     return finalObject;
+}
+
+char* removeQuotes(char* objectString){
+    int stringSize = strlen(objectString);
+    for(int i=0; i < stringSize-1; i++){
+        objectString[i] = objectString[i+1];
+    }
+
+    
+    objectString[stringSize - 2] = '\0';
+    return objectString;
+}
+
+void* objectToDataType(char* objectString, ComparisonObject compareObject){
+    if(compareObject == ID || compareObject == PRICE || compareObject == MAKE){
+        int* result = (int*)malloc(sizeof(int));
+        *result = atoi(objectString);
+        return (void*) result;
+    }
+    else{
+        return (void*)removeQuotes(objectString);
+    }
+    
 }

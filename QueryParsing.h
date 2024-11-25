@@ -22,7 +22,7 @@ char* concatInput(int argc, char** argv);
 CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations);
 ComparisonOperation opToEnum(char* opString);
 ComparisonObject strToObject(char* opString);
-
+void* objectToDataType(char* objectString, ComparisonObject compareObject);
 
 
 #endif

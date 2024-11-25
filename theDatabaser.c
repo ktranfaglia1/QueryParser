@@ -10,7 +10,6 @@
 
 void freeDatabase(CarContainer* container) {
 
-    
     for (int i = 0; i < container->size; i++) {
         free(container->array[i].Model);
         free(container->array[i].Color);

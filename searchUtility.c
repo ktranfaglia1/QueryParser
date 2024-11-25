@@ -20,6 +20,7 @@ CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOper
     for (int i = 0; i < car_data->size; i++) {
         Car* current = &car_data->array[i];  // Extract a car
 
+        //printf("%d\n", condition(current, value, op, obj)); // current 0
         // Check if the car meets the condition
         if (condition(current, value, op, obj)) {
             // Resize array if capacity has been met
@@ -71,6 +72,7 @@ int compare_string(const char* a, const char* b, ComparisonOperation op) {
 
 // Evaluates a condition for a specific car field using the specified comparison and comparison utility functions
 int condition(const Car* car, const void* value, ComparisonOperation op, ComparisonObject obj) {
+    //printf("Operations is %d\n", obj);
     switch (obj) {
         case ID:
             return compare_int(car->ID, *(int*)value, op);
@@ -79,6 +81,7 @@ int condition(const Car* car, const void* value, ComparisonOperation op, Compari
         case MAKE:
             return compare_int(car->YearMake, *(int*)value, op);
         case MODEL:
+            //printf("Model: %s & Value: %s\n", car->Model, (char*)value); //PROBLEM ITS IN QUOTATIONS
             return compare_string(car->Model, (const char*)value, op);
         case COLOR:
             return compare_string(car->Color, (const char*)value, op);
