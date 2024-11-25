@@ -32,6 +32,18 @@ void printDatabase(CarContainer* container) {
     }
 }
 
+void shortPrintDatabase(CarContainer* container) {
+    for (int i = 0; i < 10; i++) {
+        printf("%d,%s,%d,%s,%d,%s\n",
+            container->array[i].ID, 
+            container->array[i].Model, 
+            container->array[i].YearMake, 
+            container->array[i].Color, 
+            container->array[i].Price, 
+            container->array[i].Dealer);
+    }
+}
+
 CarContainer* createDatabase(char *databaseName) {
     CarContainer* container = (CarContainer*)malloc(sizeof(CarContainer));
     

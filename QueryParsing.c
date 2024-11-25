@@ -72,38 +72,37 @@ CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
     CarContainer* database1;
     CarContainer* database2;
 
+    CarContainer* newData;
+    CarContainer* intersectData;
+    CarContainer* unionData;
+   
 
+   
+    
     for(int i = 1; i < atoi(inFixOperations[0].dataType);i++){
         if(strcmp(inFixOperations[i].dataType, "AND") == 0){
 
             database1 = structPop(dataStack);
             database2 = structPop(dataStack);
 
-            CarContainer* intersectData = intersect_arrays(database1, database2);
-            //printDatabase(intersectData);
-            printf("INTERSECT\n");
+            intersectData = intersect_arrays(database1, database2);
             structPush(dataStack, intersectData, sizeof(*intersectData));
         }
         else if(strcmp(inFixOperations[i].dataType, "OR") == 0){
             database1 = structPop(dataStack);
             database2 = structPop(dataStack);
 
-            CarContainer* unionData =  union_arrays(database1, database2);
-            printDatabase(unionData);
-            printf("UNION\n");
+            unionData =  union_arrays(database1, database2);
             structPush(dataStack, unionData, sizeof(*unionData));
 
         } else{
             ComparisonObject dataType = strToObject(inFixOperations[i].dataType);
-            CarContainer* newData =  find_all(database, objectToDataType(inFixOperations[i].object, dataType), opToEnum(inFixOperations[i].condition), dataType);
-            //printDatabase(newData);
-            printf("CREATE\n");
+            newData =  find_all(database, objectToDataType(inFixOperations[i].object, dataType), opToEnum(inFixOperations[i].condition), dataType);
             structPush(dataStack, newData, sizeof(*newData)); 
         }
     }
 
     CarContainer* finalResult = structPop(dataStack);
-    //freeDatabase(database);
     destroyStructStack(dataStack);
 
     return finalResult;
@@ -184,13 +183,14 @@ char* removeQuotes(char* objectString){
 }
 
 void* objectToDataType(char* objectString, ComparisonObject compareObject){
+    objectString = removeQuotes(objectString);
     if(compareObject == ID || compareObject == PRICE || compareObject == MAKE){
         int* result = (int*)malloc(sizeof(int));
         *result = atoi(objectString);
         return (void*) result;
     }
     else{
-        return (void*)removeQuotes(objectString);
+        return objectString;
     }
     
 }
