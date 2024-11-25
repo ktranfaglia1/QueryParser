@@ -1,6 +1,3 @@
-
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,7 +14,7 @@ void freeDatabase(CarContainer* container) {
         free(container->array[i].Dealer);
     }
     
-    free(container->array); //BREAKS HERE
+    free(container->array);
     free(container);
 }
 
