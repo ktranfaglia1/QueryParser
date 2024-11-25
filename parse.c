@@ -2,6 +2,8 @@
 //11/18/2024
 //COSC 420
 
+/* TODO: Fix memory leaks */
+
 
 #include <stdio.h>
 #include <stdlib.h>
