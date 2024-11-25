@@ -12,135 +12,156 @@
 #include "parse.h"
 
 
-char** getArgStrings(int argc, char** argv) {
-    //Initialize the count storing the size of query for Select, From, and Where keywords
-    int selectSize = 0;
-    int fromSize = 0;
-    int whereSize = 0;
-    //Initialize variables that store information on string parsing progress. progress == 1 if parsing select,  progress == 2 if parsing from, progress == 3 if parsing where. first == 1 if this is the first word following any of the query keywords.
-    int progress = 0;
-    int first = 0;
+char** getArgStrings(int argc, char** argv, int* size) {
     for (int i = 1; i < argc; i++) {
-        //If we have reached the select keyword, increment progress and set first to true because we will reach first word of select portion of query
-        if (!strcmp("SELECT", argv[i])) {
-            progress++;
-            first = 1;
-        }
-        //If we have reached the from keyword, increment progress and set first to true because we will reach first word of from portion of query
-        else if (!strcmp("FROM", argv[i])) {
-            progress++;
-            first = 1;
-        }
-        //If we have reached the where keyword, increment progress and set first to true because we will reach first word of where portion of query
-        else if (!strcmp("WHERE", argv[i])) {
-            progress++;
-            first = 1;
-        }
-        //Otherwise check progress to see which query string length this word's size will be added onto. If this is the first word of the query section, only add the word. Otherwise add the word + one more for the space.
-        else {
-            if (progress == 1) {
-                if (first) {
-                    first = 0;
-                }
-                else {
-                    selectSize++;
-                }
-                selectSize += strlen(argv[i]);
-            }
-            else if (progress == 2) {
-                if (first) {
-                    first = 0;
-                }
-                else {
-                    fromSize++;
-                }
-                fromSize += strlen(argv[i]);
-            }
-            else if (progress == 3) {
-                if (first) {
-                    first = 0;
-                }
-                else {
-                    whereSize++;
-                }
-                whereSize += strlen(argv[i]);
-            }
+        if (!strcmp("SELECT", argv[i])) && (progress != 0) {
+            (size*)++;
         }
     }
-    
-    //Initialize strings that will store each portion of the query.
-    char* selectString = (char*)malloc(sizeof(char) * selectSize + 1);
-    char* fromString = (char*)malloc(sizeof(char) * fromSize + 1);
-    char* whereString = (char*)malloc(sizeof(char) * whereSize + 1);
-    selectString[selectSize] = '\0';
-    fromString[fromSize] = '\0';
-    whereString[whereSize] = '\0';
-    
-    //Reset progress and first variables to prepare for another iteration over the argv array.
-    progress = 0;
-    first = 0;
-    for (int i = 1; i < argc; i++) {
-        //If we have reached the select keyword, increment progress and set first to true because we will reach first word of select portion of query
-        if (!strcmp("SELECT", argv[i])) {
-            progress++;
-            first = 1;
-        }
-        //If we have reached the from keyword, increment progress and set first to true because we will reach first word of from portion of query
-        else if (!strcmp("FROM", argv[i])) {
-            progress++;
-            first = 1;
-        }
-        //If we have reached the where keyword, increment progress and set first to true because we will reach first word of where portion of query
-        else if (!strcmp("WHERE", argv[i])) {
-            progress++;
-            first = 1;
-        }
-        //Otherwise check progress to see which query string this word size will be appended onto. If this is the first word of the query section, only add the word. Otherwise add the word + an empty space character.
-        else {
-            if (progress == 1) {
-                if (first) {
-                    first = 0;
-                }
-                else {
-                    strcat(selectString, " ");
-                }
-                strcat(selectString, argv[i]);
+    char** inputStrings = (char**)malloc(sizeof(char*) * (3 * size));
+    int startPos = 1;
+    int comp = -1;
+    int num = 0;
+    while (!(startPos == comp)) {
+        comp = startPos;
+        //Initialize the count storing the size of query for Select, From, and Where keywords
+        int selectSize = 0;
+        int fromSize = 0;
+        int whereSize = 0;
+        //Initialize variables that store information on string parsing progress. progress == 1 if parsing select,  progress == 2 if parsing from, progress == 3 if parsing where. first == 1 if this is the first word following any of the query keywords.
+        int progress = 0;
+        int first = 0;
+        for (int i = startPos; i < argc; i++) {
+            //If we have reached the select keyword, increment progress and set first to true because we will reach first word of select portion of query
+            if (!strcmp("SELECT", argv[i])) && (progress != 0) {
+                break;
             }
-            else if (progress == 2) {
-                if (first) {
-                    first = 0;
-                }
-                else {
-                    strcat(fromString, " ");
-                }
-                strcat(fromString, argv[i]);
+            else if (!strcmp("SELECT", argv[i])) {
+                progress++;
+                first = 1;
             }
-            else if (progress == 3) {
-                if (first) {
-                    first = 0;
+            //If we have reached the from keyword, increment progress and set first to true because we will reach first word of from portion of query
+            else if (!strcmp("FROM", argv[i])) {
+                progress++;
+                first = 1;
+            }
+            //If we have reached the where keyword, increment progress and set first to true because we will reach first word of where portion of query
+            else if (!strcmp("WHERE", argv[i])) {
+                progress++;
+                first = 1;
+            }
+            //Otherwise check progress to see which query string length this word's size will be added onto. If this is the first word of the query section, only add the word. Otherwise add the word + one more for the space.
+            else {
+                if (progress == 1) {
+                    if (first) {
+                        first = 0;
+                    }
+                    else {
+                        selectSize++;
+                    }
+                    selectSize += strlen(argv[i]);
                 }
-                else {
-                    strcat(whereString, " ");
+                else if (progress == 2) {
+                    if (first) {
+                        first = 0;
+                    }
+                    else {
+                        fromSize++;
+                    }
+                    fromSize += strlen(argv[i]);
                 }
-                strcat(whereString, argv[i]);
+                else if (progress == 3) {
+                    if (first) {
+                        first = 0;
+                    }
+                    else {
+                        whereSize++;
+                    }
+                    whereSize += strlen(argv[i]);
+                }
             }
         }
+        
+        //Initialize strings that will store each portion of the query.
+        char* selectString = (char*)malloc(sizeof(char) * selectSize + 1);
+        char* fromString = (char*)malloc(sizeof(char) * fromSize + 1);
+        char* whereString = (char*)malloc(sizeof(char) * whereSize + 1);
+        selectString[selectSize] = '\0';
+        fromString[fromSize] = '\0';
+        whereString[whereSize] = '\0';
+        
+        //Reset progress and first variables to prepare for another iteration over the argv array.
+        progress = 0;
+        first = 0;
+        for (int i = startPos; i < argc; i++) {
+            //If we have reached the select keyword, increment progress and set first to true because we will reach first word of select portion of query
+            if ((!strcmp("SELECT", argv[i])) && (progress != 0)) {
+                startPos = i;
+                break;
+            }
+            else if (!strcmp("SELECT", argv[i])) {
+                progress++;
+                first = 1;
+            }
+            //If we have reached the from keyword, increment progress and set first to true because we will reach first word of from portion of query
+            else if (!strcmp("FROM", argv[i])) {
+                progress++;
+                first = 1;
+            }
+            //If we have reached the where keyword, increment progress and set first to true because we will reach first word of where portion of query
+            else if (!strcmp("WHERE", argv[i])) {
+                progress++;
+                first = 1;
+            }
+            //Otherwise check progress to see which query string this word size will be appended onto. If this is the first word of the query section, only add the word. Otherwise add the word + an empty space character.
+            else {
+                if (progress == 1) {
+                    if (first) {
+                        first = 0;
+                    }
+                    else {
+                        strcat(selectString, " ");
+                    }
+                    strcat(selectString, argv[i]);
+                }
+                else if (progress == 2) {
+                    if (first) {
+                        first = 0;
+                    }
+                    else {
+                        strcat(fromString, " ");
+                    }
+                    strcat(fromString, argv[i]);
+                }
+                else if (progress == 3) {
+                    if (first) {
+                        first = 0;
+                    }
+                    else {
+                        strcat(whereString, " ");
+                    }
+                    strcat(whereString, argv[i]);
+                }
+            }
+        }
+        //Initialize array to contain the three portions of the query and load those portions onto the array
+        inputStrings[0 + (num * 3)] = selectString;
+        inputStrings[1 + (num * 3)] = fromString;
+        inputStrings[2 + (num * 3)] = whereString;
+        num++;
+        //Return all three arrays stored in the overall array
     }
-    //Initialize array to contain the three portions of the query and load those portions onto the array
-    char** inputStrings = (char**)malloc(sizeof(char*) * 3);
-    inputStrings[0] = selectString;
-    inputStrings[1] = fromString;
-    inputStrings[2] = whereString;
-    //Return all three arrays stored in the overall array
     return inputStrings;
 }
 
 // Hopefully helping to fix memory leaks 
-void freeArgStrings(char** inputStrings) {
+void freeArgStrings(char** inputStrings, int size) {
     if (inputStrings) {
-        free(inputStrings[0]);  // Free the selectString
-        free(inputStrings[1]);  // Free the fromString
-        free(inputStrings[2]);  // Free the whereString
+        for (int i = 0; i < size; i++) {
+            free(inputStrings[0 + (i * 3)]);  // Free the selectString
+            free(inputStrings[1 + (i * 3)]);  // Free the fromString
+            free(inputStrings[2 + (i * 3)]);  // Free the whereString
+        }
         free(inputStrings);     // Free the array of pointers itself
     }
 }
@@ -339,13 +360,18 @@ char** getOpers(char* inputString) {
 }
 
 
-char*** getParams(int argc, char** argv) {
-    char*** parameters = (char***)malloc(sizeof(char**) * 3);
-    char** inputStrings = getArgStrings(argc, argv);
-    parameters[0] = getCSVs(inputStrings[0]);
-    parameters[1] = getCSVs(inputStrings[1]);
-    parameters[2] = getOpers(inputStrings[2]);
-    freeArgStrings(inputStrings);
+char*** getParams(int argc, char** argv, int* size) {
+    int count = 0;
+    char** inputStrings = getArgStrings(argc, argv, &count);
+    size = &count;
+    char*** parameters = (char***)malloc(sizeof(char**) * (3 * count));
+    for (int i = 0; i < count; i++) {
+        parameters[0 + (i * 3)] = getCSVs(inputStrings[0 + (i * 3)]);
+        parameters[1 + (i * 3)] = getCSVs(inputStrings[1 + (i * 3)]);
+        parameters[2 + (i * 3)] = getOpers(inputStrings[2 + (i * 3)]);
+    }
+    freeArgStrings(inputStrings, size);
+    return parameters;
     return parameters;
 }
 
