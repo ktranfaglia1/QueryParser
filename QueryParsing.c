@@ -11,6 +11,8 @@
 #include <string.h>
 #include "QueryParsing.h"
 
+/* TODO: Fix memory leaks */
+
 
 /**
  * \fn concatInput
