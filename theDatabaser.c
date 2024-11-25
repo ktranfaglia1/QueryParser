@@ -129,6 +129,7 @@ CarContainer* createDatabase(char *databaseName) {
     
 	fclose(fp);
 
+	free(database);
 	return container;
 	//freeDatabase(container);
 }
