@@ -72,6 +72,7 @@ CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
     CarContainer* database1;
     CarContainer* database2;
 
+
     for(int i = 1; i < atoi(inFixOperations[0].dataType);i++){
         if(strcmp(inFixOperations[i].dataType, "AND") == 0){
 
@@ -79,6 +80,8 @@ CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
             database2 = structPop(dataStack);
 
             CarContainer* intersectData = intersect_arrays(database1, database2);
+            //printDatabase(intersectData);
+            printf("INTERSECT\n");
             structPush(dataStack, intersectData, sizeof(*intersectData));
         }
         else if(strcmp(inFixOperations[i].dataType, "OR") == 0){
@@ -86,11 +89,15 @@ CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
             database2 = structPop(dataStack);
 
             CarContainer* unionData =  union_arrays(database1, database2);
+            printDatabase(unionData);
+            printf("UNION\n");
             structPush(dataStack, unionData, sizeof(*unionData));
 
         } else{
             ComparisonObject dataType = strToObject(inFixOperations[i].dataType);
             CarContainer* newData =  find_all(database, objectToDataType(inFixOperations[i].object, dataType), opToEnum(inFixOperations[i].condition), dataType);
+            //printDatabase(newData);
+            printf("CREATE\n");
             structPush(dataStack, newData, sizeof(*newData)); 
         }
     }

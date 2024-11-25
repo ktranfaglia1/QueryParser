@@ -83,6 +83,17 @@ CarContainer* createDatabase(char *databaseName) {
 	//freeDatabase(container);
 }
 
+Car copyCar(Car currentCar){
+    Car newCar;
+
+    newCar = currentCar;
+    memcpy(newCar.Dealer, currentCar.Dealer, sizeof(currentCar.Dealer));
+    memcpy(newCar.Color, currentCar.Color, sizeof(currentCar.Color));
+    memcpy(newCar.Model, currentCar.Model, sizeof(currentCar.Model));
+
+    return newCar;
+}
+
 /*
 * TEST CASE
 * 

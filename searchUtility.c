@@ -117,7 +117,7 @@ CarContainer* union_arrays(CarContainer* array1, CarContainer* array2) {
         }
         // If not found, add the car to the result
         if (!found) {
-            result->array[result->size++] = array2->array[i];
+            result->array[result->size++] = copyCar(array1->array[i]);
         }
     }
     return result;
@@ -136,7 +136,8 @@ CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
         for (int j = 0; j < array2->size; j++) {
             // If found, add the car to the result
             if (array1->array[i].ID == array2->array[j].ID) {
-                result->array[result->size++] = array1->array[i];
+                
+                result->array[result->size++] = copyCar(array1->array[i]);
                 break;
             }
         }

@@ -21,6 +21,6 @@ void freeDatabase(CarContainer* container);
 void printDatabase(CarContainer* container);
 CarContainer* createDatabase(char *databaseName);
 
-
+Car copyCar(Car);
 
 #endif
