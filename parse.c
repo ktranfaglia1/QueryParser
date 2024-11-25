@@ -345,10 +345,7 @@ char*** getParams(int argc, char** argv) {
     parameters[0] = getCSVs(inputStrings[0]);
     parameters[1] = getCSVs(inputStrings[1]);
     parameters[2] = getOpers(inputStrings[2]);
-    free(inputStrings[0]);
-    free(inputStrings[1]);
-    free(inputStrings[2]);
-    free(inputStrings);
+    freeArgStrings(inputStrings);
     return parameters;
 }
 
