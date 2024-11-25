@@ -70,8 +70,6 @@ CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
     initStructStack(dataStack);
 
     for(int i = 1; i < atoi(inFixOperations[0].dataType);i++){
-        //printf("Iteration: %d\n", i);
-        //printf("Operation %d: %s %s %s\n", i, inFixOperations[i].dataType, inFixOperations[i].condition, inFixOperations[i].object);
         if(strcmp(inFixOperations[i].dataType, "AND") == 0){
 
             CarContainer* database1 = structPop(dataStack);
