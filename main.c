@@ -22,9 +22,8 @@ int main(int argc, char** argv) {
     //Runs Operations Accordingly
     database = callOperations(database, postFix); 
 
-
     //Outputs Database with proper columns
-    printDatabase(database);
+    printDatabase(database, parameters[0]);
 
     //Frees Memory
     freeDatabase(database);

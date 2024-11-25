@@ -18,8 +18,8 @@ typedef struct CarContainer {
 
 //Function Prototypes
 void freeDatabase(CarContainer* container);
-void printDatabase(CarContainer* container);
-void shortPrintDatabase(CarContainer* container);
+void printDatabase(CarContainer* container, char** selectCategories);
+void shortPrintDatabase(CarContainer* container, char** selectCategories);
 CarContainer* createDatabase(char *databaseName);
 
 Car copyCar(Car);

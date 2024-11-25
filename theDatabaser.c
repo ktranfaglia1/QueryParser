@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "theDatabaser.h"
+#include "QueryParsing.h"
 
 
 
@@ -20,27 +21,46 @@ void freeDatabase(CarContainer* container) {
     free(container);
 }
 
-void printDatabase(CarContainer* container) {
+void printDatabase(CarContainer* container, char** params) {
     for (int i = 0; i < container->size; i++) {
-        printf("%d,%s,%d,%s,%d,%s\n",
-            container->array[i].ID, 
-            container->array[i].Model, 
-            container->array[i].YearMake, 
-            container->array[i].Color, 
-            container->array[i].Price, 
-            container->array[i].Dealer);
+        for(int pIndex = 1; pIndex < atoi(params[0]); pIndex++)
+        {
+            switch (strToObject(params[pIndex]))
+            {
+            case ID:
+                printf("%d,", container->array[i].ID);
+                break;
+            case MODEL:
+                printf("%s,", container->array[i].Model);
+                break;
+            case COLOR:
+                printf("%s,",container->array[i].Color);
+                break;
+            case MAKE:
+                printf("%d,",container->array[i].YearMake);
+                break;
+            case PRICE:
+                printf("%d,",container->array[i].Price);
+                break;
+            case DEALER:
+                printf("%s,",container->array[i].Dealer);
+                break;
+            default:
+                break;
+            }
+        }
+        printf("\n");
     }
 }
 
-void shortPrintDatabase(CarContainer* container) {
+void shortPrintDatabase(CarContainer* container, char** params) {
     for (int i = 0; i < 10; i++) {
-        printf("%d,%s,%d,%s,%d,%s\n",
-            container->array[i].ID, 
-            container->array[i].Model, 
-            container->array[i].YearMake, 
-            container->array[i].Color, 
-            container->array[i].Price, 
-            container->array[i].Dealer);
+        printf("%s,", container->array[i].Model);
+        printf("%d,",container->array[i].YearMake);
+        printf("%s,",container->array[i].Color);
+        printf("%d,",container->array[i].Price);
+        printf("%s,",container->array[i].Dealer);
+        printf("\n");
     }
 }
 
