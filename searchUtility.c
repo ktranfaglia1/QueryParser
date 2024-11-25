@@ -3,9 +3,6 @@
 *  Last updated 11/18/24
 *  This program contains search utility functions to return a list of all entires that meet a certain criteria
 */
-
-
-
 #include "searchUtility.h"
 
 // Generalized filter function to return a filtered CarContainer
@@ -139,7 +136,6 @@ CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
         for (int j = 0; j < array2->size; j++) {
             // If found, add the car to the result
             if (array1->array[i].ID == array2->array[j].ID) {
-                
                 result->array[result->size++] = copyCar(array2->array[j]);
                 break;
             }
@@ -147,5 +143,3 @@ CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
     }
     return result;
 }
-
-

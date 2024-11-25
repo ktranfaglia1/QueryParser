@@ -3,7 +3,7 @@
 *  Last updated 11/18/24
 *  This program contains search utility functions to return a list of all entires that meet a certain criteria
 */
-#include "parallelSearchUtility.h"
+#include "searchUtilityOMP.h"
 
 // Generalized filter function to return a filtered CarContainer
 CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOperation op, ComparisonObject obj) {
@@ -31,7 +31,8 @@ CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOper
                     capacity *= 2;
                     local_results[tid].array = (Car*)realloc(local_results[tid].array, capacity * sizeof(Car));
                 }
-                local_results[tid].array[local_results[tid].size++] = car_data->array[i];
+                // Use copyCar to ensure a deep copy of the car object
+                local_results[tid].array[local_results[tid].size++] = copyCar(car_data->array[i]);
             }
         }
     }
@@ -44,7 +45,7 @@ CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOper
                 capacity *= 2;
                 results->array = (Car*)realloc(results->array, capacity * sizeof(Car));
             }
-            results->array[results->size++] = local_results[i].array[j];
+            results->array[results->size++] = copyCar(local_results[i].array[j]); // Use copyCar to ensure correct memory handling
         }
         free(local_results[i].array);  // Free thread-local arrays
     }
@@ -119,7 +120,7 @@ CarContainer* union_arrays(CarContainer* array1, CarContainer* array2) {
 
     // Add all cars from array1 to the result (no duplicates in array1)
     for (int i = 0; i < array1->size; i++) {
-        result->array[result->size++] = array1->array[i];
+        result->array[result->size++] = copyCar(array1->array[i]);
     }
 
     // Allocate thread-local result containers to avoid race conditions
@@ -147,7 +148,7 @@ CarContainer* union_arrays(CarContainer* array1, CarContainer* array2) {
 
             // Add to thread-local results if not found
             if (!found) {
-                local_results[tid].array[local_results[tid].size++] = array2->array[i];
+                local_results[tid].array[local_results[tid].size++] = copyCar(array2->array[i]);
             }
         }
     }
@@ -171,7 +172,7 @@ CarContainer* union_arrays(CarContainer* array1, CarContainer* array2) {
                     capacity *= 2;
                     result->array = (Car*)realloc(result->array, capacity * sizeof(Car));
                 }
-                result->array[result->size++] = local_results[t].array[i];
+                result->array[result->size++] = copyCar(local_results[t].array[i]);
             }
         }
         free(local_results[t].array);  // Free thread-local arrays
@@ -200,13 +201,14 @@ CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
         #pragma omp for
         for (int i = 0; i < array1->size; i++) {
             for (int j = 0; j < array2->size; j++) {
-                if (array1->array[i].ID == array2->array[j].ID) { // Match found
+                // Check for ID match
+                if (array1->array[i].ID == array2->array[j].ID) {
                     // Resize thread-local array if necessary
                     if (local_result.size == capacity) {
                         capacity *= 2;
                         local_result.array = (Car*)realloc(local_result.array, capacity * sizeof(Car));
                     }
-                    local_result.array[local_result.size++] = array1->array[i];
+                    local_result.array[local_result.size++] = copyCar(array1->array[i]);
                     break;
                 }
             }
@@ -220,7 +222,7 @@ CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
                     capacity *= 2;
                     result->array = (Car*)realloc(result->array, capacity * sizeof(Car));
                 }
-                result->array[result->size++] = local_result.array[i];
+                result->array[result->size++] = copyCar(local_result.array[i]);
             }
         }
         free(local_result.array);  // Free thread-local array
