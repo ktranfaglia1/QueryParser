@@ -2,6 +2,8 @@
 //11/18/2024
 //COSC 420
 
+/* TODO: Fix memory leaks */
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -150,6 +152,18 @@ char** getArgStrings(int argc, char** argv, int* size) {
         //Return all three arrays stored in the overall array
     }
     return inputStrings;
+}
+
+// Hopefully helping to fix memory leaks 
+void freeArgStrings(char** inputStrings, int size) {
+    if (inputStrings) {
+        for (int i = 0; i < size; i++) {
+            free(inputStrings[0 + (i * 3)]);  // Free the selectString
+            free(inputStrings[1 + (i * 3)]);  // Free the fromString
+            free(inputStrings[2 + (i * 3)]);  // Free the whereString
+        }
+        free(inputStrings);     // Free the array of pointers itself
+    }
 }
 
 char** getCSVs(char* inputString) {
@@ -356,11 +370,9 @@ char*** getParams(int argc, char** argv, int* size) {
         parameters[0 + (i * 3)] = getCSVs(inputStrings[0 + (i * 3)]);
         parameters[1 + (i * 3)] = getCSVs(inputStrings[1 + (i * 3)]);
         parameters[2 + (i * 3)] = getOpers(inputStrings[2 + (i * 3)]);
-        free(inputStrings[0 + (i * 3)]);
-        free(inputStrings[1 + (i * 3)]);
-        free(inputStrings[2 + (i * 3)]);
     }
-    free(inputStrings);
+    freeArgStrings(inputStrings, size);
+    return parameters;
     return parameters;
 }
 

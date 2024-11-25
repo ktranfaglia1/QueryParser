@@ -11,6 +11,8 @@
 #include <string.h>
 #include "QueryParsing.h"
 
+/* TODO: Fix memory leaks */
+
 
 /**
  * \fn concatInput
@@ -21,7 +23,8 @@
  * 
  * @return {char*} concatString the combined String
  */
-char* concatInput(int argc, char** argv){
+
+/* char* concatInput(int argc, char** argv){
     int strSize = 0;
 
     for(int i = 0; i < argc; i++){
@@ -45,6 +48,7 @@ char* concatInput(int argc, char** argv){
     concatString[count-1] = '\0';
     return concatString;
 }
+*/
 
 
 /**

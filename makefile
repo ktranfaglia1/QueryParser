@@ -1,7 +1,7 @@
 CC=gcc
 
 
-OBJS=main.o parse.o QueryParsing.o searchUtility.o theDatabaser.o stringStack.o structStack.o
+OBJS=serialMain.o parse.o QueryParsing.o searchUtility.o theDatabaser.o stringStack.o structStack.o
 
 SerialDataBase: $(OBJS)
 	$(CC) -o $@ $^
