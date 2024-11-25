@@ -135,6 +135,16 @@ char** getArgStrings(int argc, char** argv) {
     return inputStrings;
 }
 
+// Hopefully helping to fix memory leaks 
+void freeArgStrings(char** inputStrings) {
+    if (inputStrings) {
+        free(inputStrings[0]);  // Free the selectString
+        free(inputStrings[1]);  // Free the fromString
+        free(inputStrings[2]);  // Free the whereString
+        free(inputStrings);     // Free the array of pointers itself
+    }
+}
+
 char** getCSVs(char* inputString) {
     //Initialize size of inputString
     int size = strlen(inputString);
