@@ -14,11 +14,11 @@
 
 char** getArgStrings(int argc, char** argv, int* size) {
     for (int i = 1; i < argc; i++) {
-        if (!strcmp("SELECT", argv[i])) && (progress != 0) {
-            (size*)++;
+        if (!strcmp("SELECT", argv[i])) {
+            (*size)++;
         }
     }
-    char** inputStrings = (char**)malloc(sizeof(char*) * (3 * size));
+    char** inputStrings = (char**)malloc(sizeof(char*) * (3 * (*size)));
     int startPos = 1;
     int comp = -1;
     int num = 0;
@@ -33,7 +33,7 @@ char** getArgStrings(int argc, char** argv, int* size) {
         int first = 0;
         for (int i = startPos; i < argc; i++) {
             //If we have reached the select keyword, increment progress and set first to true because we will reach first word of select portion of query
-            if (!strcmp("SELECT", argv[i])) && (progress != 0) {
+            if (!strcmp("SELECT", argv[i]) && (progress != 0)) {
                 break;
             }
             else if (!strcmp("SELECT", argv[i])) {
@@ -361,17 +361,30 @@ char** getOpers(char* inputString) {
 
 
 char*** getParams(int argc, char** argv, int* size) {
-    int count = 0;
-    char** inputStrings = getArgStrings(argc, argv, &count);
-    size = &count;
-    char*** parameters = (char***)malloc(sizeof(char**) * (3 * count));
-    for (int i = 0; i < count; i++) {
+    char** inputStrings = getArgStrings(argc, argv, size);
+    char*** parameters = (char***)malloc(sizeof(char**) * (3 * (*size)));
+    for (int i = 0; i < (*size); i++) {
         parameters[0 + (i * 3)] = getCSVs(inputStrings[0 + (i * 3)]);
         parameters[1 + (i * 3)] = getCSVs(inputStrings[1 + (i * 3)]);
         parameters[2 + (i * 3)] = getOpers(inputStrings[2 + (i * 3)]);
+        //Printing input strings
+        printf("%d: %s\n", 0 + (i * 3), inputStrings[0 + (i * 3)]);
+        printf("%d: %s\n", 1 + (i * 3), inputStrings[1 + (i * 3)]);
+        printf("%d: %s\n", 2 + (i * 3), inputStrings[2 + (i * 3)]);
+        //Printing select
+        for (int f = 1; i < atoi(parameters[0 + (i * 3)][0]); f++) {
+            printf("%s, ", parameters[0 + (i * 3)][f]);
+        }
+        //Printinf from
+        for (int f = 1; i < atoi(parameters[1 + (i * 3)][0]); f++) {
+            printf("%s, ", parameters[1 + (i * 3)][f]);
+        }
+        //Printinf where
+        for (int f = 1; i < atoi(parameters[2 + (i * 3)][0]); f++) {
+            printf("%s, ", parameters[2 + (i * 3)][f]);
+        }
     }
-    freeArgStrings(inputStrings, size);
-    return parameters;
+    freeArgStrings(inputStrings, *size);
     return parameters;
 }
 

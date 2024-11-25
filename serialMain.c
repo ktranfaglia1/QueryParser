@@ -7,12 +7,12 @@ int main(int argc, char** argv) {
     
     int numQueries = 0;
     //Turns Parameter into Parsed Array
-    //char*** parameters = getParams(argc, argv, &numQueries); 
-    char*** parameters = getParams(argc, argv); 
+    char*** parameters = getParams(argc, argv, &numQueries); 
+    //char*** parameters = getParams(argc, argv); 
 
-    int i = 0;
+    printf("NUM QUERIES %d\n", numQueries);
 
-    //for(int i = 0; i < numQueries; i++)
+    for(int i = 0; i < numQueries; i++)
     {
         //Select Command Runs 
         CarContainer* database = createDatabase(parameters[i * 3 + 1][1]);
