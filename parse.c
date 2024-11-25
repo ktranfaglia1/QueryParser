@@ -362,8 +362,7 @@ char** getOpers(char* inputString) {
 
 char*** getParams(int argc, char** argv, int* size) {
     int count = 0;
-    int* cpoint = &count;
-    char** inputStrings = getArgStrings(argc, argv, cpoint);
+    char** inputStrings = getArgStrings(argc, argv, &count);
     size = &count;
     char*** parameters = (char***)malloc(sizeof(char**) * (3 * count));
     for (int i = 0; i < count; i++) {
