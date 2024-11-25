@@ -1,3 +1,11 @@
+/**
+ * @file QueryParsing.c
+ * 
+ * @brief All Functions Relating to Handling WHERE PostFix Querys
+ * 
+ * 
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -40,8 +48,14 @@ char* concatInput(int argc, char** argv){
 
 
 /**
+ * 
  * \fn callOperations
+ * 
+ * @file QueryParsing.c
+ * QueryParsing.c
  * @brief Loops through array of InFix Operations to be called for Where Command
+ * 
+ * 
  * 
  * @param database {CarContainer*} Complete Database includes everything inside of the file
  * @param inFixOperations {opTuple*} contains array of operations in InFix Notation
@@ -55,36 +69,38 @@ CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
     structStack* dataStack = &actualStack;
     initStructStack(dataStack);
 
-
     for(int i = 1; i < atoi(inFixOperations[0].dataType);i++){
-        if(strcmp(inFixOperations[i].dataType, "AND")){
+        //printf("Iteration: %d\n", i);
+        //printf("Operation %d: %s %s %s\n", i, inFixOperations[i].dataType, inFixOperations[i].condition, inFixOperations[i].object);
+        if(strcmp(inFixOperations[i].dataType, "AND") == 0){
 
             CarContainer* database1 = structPop(dataStack);
             CarContainer* database2 = structPop(dataStack);
 
             CarContainer* intersectData = intersect_arrays(database1, database2);
-            structPush(dataStack, intersectData, sizeof(intersectData));
+            structPush(dataStack, intersectData, sizeof(*intersectData));
 
             freeDatabase(database1);
             freeDatabase(database2);
         }
-        else if(strcmp(inFixOperations[i].dataType, "OR")){
+        else if(strcmp(inFixOperations[i].dataType, "OR") == 0){
             
             CarContainer* database1 = structPop(dataStack);
             CarContainer* database2 = structPop(dataStack);
 
             CarContainer* unionData =  union_arrays(database1, database2);
-            structPush(dataStack, unionData, sizeof(unionData));
+            structPush(dataStack, unionData, sizeof(*unionData));
 
             freeDatabase(database1);
             freeDatabase(database2);
         } else{
             CarContainer* newData =  find_all(database, inFixOperations[i].object, opToEnum(inFixOperations[i].condition), strToObject(inFixOperations[i].dataType));
-            structPush(dataStack, newData, sizeof(newData)); 
+            structPush(dataStack, newData, sizeof(*newData)); 
         }
     }
 
     CarContainer* finalResult = structPop(dataStack);
+    freeDatabase(database);
     destroyStructStack(dataStack);
 
     return finalResult;

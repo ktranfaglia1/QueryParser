@@ -9,12 +9,15 @@
 
 
 void freeDatabase(CarContainer* container) {
+
+    
     for (int i = 0; i < container->size; i++) {
         free(container->array[i].Model);
         free(container->array[i].Color);
         free(container->array[i].Dealer);
     }
-    free(container->array);
+    
+    free(container->array); //BREAKS HERE
     free(container);
 }
 
