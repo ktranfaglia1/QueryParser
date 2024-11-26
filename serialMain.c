@@ -12,6 +12,9 @@ int main(int argc, char** argv) {
 
     for(int i = 0; i < numQueries; i++)
     {
+
+        printf("\nQuery %d\n\n", i);
+
         //Select Command Runs 
         CarContainer* database = createDatabase(parameters[i * 3 + 1][1]);
 
