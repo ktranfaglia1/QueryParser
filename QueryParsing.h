@@ -1,7 +1,7 @@
 #ifndef Query_Parser_H
 #define Query_Parser_H
 
-#include "searchUtility.h"
+#include "searchUtilityMPI.h"
 #include "structStack.h"
 
 /**  
