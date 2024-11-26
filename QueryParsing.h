@@ -4,7 +4,7 @@
 #include "searchUtility.h"
 #include "structStack.h"
 
-/**  
+/**
  * \struct opTuple
  * @brief this is the data structure oriented at holding operations to be executed
  * @param dataType type{char*} This is the column to take from ex. "Year" , "Model" ...
