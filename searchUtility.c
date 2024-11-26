@@ -8,7 +8,6 @@
 // Generalized filter function to return a filtered CarContainer
 CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOperation op, ComparisonObject obj) {
     // Allocate space for the result container and initialize the CarContainer object
-    printf("Before Car Container Malloc\n");
     CarContainer* results = (CarContainer*)malloc(sizeof(CarContainer));
     int capacity = 32;
 
@@ -30,7 +29,6 @@ CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOper
             //results->array[results->size++] = *current; // Add car to the result
         }
     }
-    printf("Made it throguh\n");
 
     return results;  // Return the filtered container
 }
@@ -104,7 +102,7 @@ CarContainer* union_arrays(CarContainer* array1, CarContainer* array2) {
     //printf("Array 2 Size: %d\n", array2->size);
     // Add all cars from the first array to the result
     for (int i = 0; i < array1->size; i++) {
-        result->array[result->size++] = array1->array[i];
+        result->array[result->size++] = copyCar(array1->array[i]);
     }
 
     // Add cars from the second array only if they are not already in the result

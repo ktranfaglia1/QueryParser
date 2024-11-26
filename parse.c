@@ -380,6 +380,7 @@ char*** getParams(int argc, char** argv, int* size) {
         parameters[1 + (i * 3)] = getCSVs(inputStrings[1 + (i * 3)]);
         parameters[2 + (i * 3)] = getOpers(inputStrings[2 + (i * 3)]);
         //Printing select
+        /*
         for (int f = 1; f < atoi(parameters[0 + (i * 3)][0]); f++) {
             printf("%s, ", parameters[0 + (i * 3)][f]);
         }
@@ -394,6 +395,7 @@ char*** getParams(int argc, char** argv, int* size) {
             printf("%s, ", parameters[2 + (i * 3)][f]);
         }
         printf("\n");
+        */
     }
     freeArgStrings(inputStrings, *size);
     return parameters;
