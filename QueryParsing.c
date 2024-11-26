@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "QueryParsing.h"
+#include "theDatabaser.h"
 
 /* TODO: Fix memory leaks */
 
@@ -67,6 +68,8 @@ CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
             intersectData = intersect_arrays(database1, database2);
             structPush(dataStack, intersectData, sizeof(*intersectData));
 
+            shortPrintDatabase(intersectData);
+
             freeDatabase(database1);
             freeDatabase(database2);
         }
@@ -78,14 +81,21 @@ CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
             unionData =  union_arrays(database1, database2);
             structPush(dataStack, unionData, sizeof(*unionData));
 
+            shortPrintDatabase(unionData);
+
             freeDatabase(database1);
             freeDatabase(database2);
 
         } else{
             printf("MAKE CALLED\n");
             ComparisonObject dataType = strToObject(inFixOperations[i].dataType);
+
+            //::BREAKS HERE::
             newData =  find_all(database, objectToDataType(inFixOperations[i].object, dataType), opToEnum(inFixOperations[i].condition), dataType);
+            printf("Created New Data\n");
             structPush(dataStack, newData, sizeof(*newData)); 
+
+            shortPrintDatabase(newData);
         }
 
     }

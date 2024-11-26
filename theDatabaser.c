@@ -52,34 +52,15 @@ void printDatabase(CarContainer* container, char** params) {
     }
 }
 
-void shortPrintDatabase(CarContainer* container, char** params) {
+void shortPrintDatabase(CarContainer* container) {
     for (int i = 0; i < 10; i++) {
-        for(int pIndex = 1; pIndex < atoi(params[0]); pIndex++)
-        {
-            switch (strToObject(params[pIndex]))
-            {
-            case ID:
-                printf("%d,", container->array[i].ID);
-                break;
-            case MODEL:
-                printf("%s,", container->array[i].Model);
-                break;
-            case COLOR:
-                printf("%s,",container->array[i].Color);
-                break;
-            case MAKE:
-                printf("%d,",container->array[i].YearMake);
-                break;
-            case PRICE:
-                printf("%d,",container->array[i].Price);
-                break;
-            case DEALER:
-                printf("%s,",container->array[i].Dealer);
-                break;
-            default:
-                break;
-            }
-        }
+        printf("%d,", container->array[i].ID);
+        printf("%s,", container->array[i].Model);
+        printf("%s,",container->array[i].Color);
+        printf("%d,",container->array[i].YearMake);
+        printf("%d,",container->array[i].Price);
+        printf("%s,",container->array[i].Dealer);
+
         printf("\n");
     }
 }
@@ -139,24 +120,26 @@ CarContainer* createDatabase(char *databaseName) {
 Car copyCar(Car currentCar){
     Car newCar;
 
-    newCar = currentCar;
-    memcpy(newCar.Dealer, currentCar.Dealer, sizeof(currentCar.Dealer));
-    memcpy(newCar.Color, currentCar.Color, sizeof(currentCar.Color));
-    memcpy(newCar.Model, currentCar.Model, sizeof(currentCar.Model));
+
+
+    newCar.ID = currentCar.ID;
+    newCar.Price = currentCar.Price;
+    newCar.YearMake = currentCar.YearMake;
+
+
+    newCar.Dealer = (char*)malloc(strlen(currentCar.Dealer) * sizeof(char) + 1);
+    memcpy(newCar.Dealer, currentCar.Dealer, strlen(currentCar.Dealer) * sizeof(char));
+
+    newCar.Color = (char*)malloc(strlen(currentCar.Color) * sizeof(char) + 1);
+    memcpy(newCar.Color, currentCar.Color, strlen(currentCar.Color) * sizeof(char));
+
+    newCar.Model = (char*)malloc(strlen(currentCar.Model) * sizeof(char) + 1);
+    memcpy(newCar.Model, currentCar.Model, strlen(currentCar.Model) * sizeof(char));
+
+    newCar.Dealer[strlen(currentCar.Dealer)] = '\0';
+    newCar.Color[strlen(currentCar.Color)] = '\0';
+    newCar.Model[strlen(currentCar.Model)] = '\0';
 
     return newCar;
 }
-
-/*
-* TEST CASE
-* 
-int main () {
-    char *str = "car_inventory";
-    CarContainer* cars = createDatabase(str);
-    printDatabase(cars);
-    freeDatabase(cars);
-    return 0;
-}
-
-*/
 
