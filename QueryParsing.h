@@ -18,7 +18,6 @@ typedef struct opTuple{
 } opTuple;
 
 
-char* concatInput(int argc, char** argv);
 CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations);
 ComparisonOperation opToEnum(char* opString);
 ComparisonObject strToObject(char* opString);

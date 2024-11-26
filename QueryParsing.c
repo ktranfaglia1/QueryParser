@@ -24,32 +24,6 @@
  * @return {char*} concatString the combined String
  */
 
-/* char* concatInput(int argc, char** argv){
-    int strSize = 0;
-
-    for(int i = 0; i < argc; i++){
-        strSize += strlen(argv[i]);
-    }
-    strSize += argc - 1;
-
-    char* concatString = (char*)malloc(sizeof(char) * strSize);
-
-
-    int count = 0;
-    for(int i = 1; i < argc; i++){
-
-        for(int j = 0; j < strlen(argv[i]); j++, count++){
-            concatString[count] = argv[i][j];
-        }
-        concatString[count] = ' ';
-        count++;
-    }
-
-    concatString[count-1] = '\0';
-    return concatString;
-}
-*/
-
 
 /**
  * 
@@ -80,6 +54,7 @@ CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
     CarContainer* intersectData;
     CarContainer* unionData;
    
+   printf("Test\n");
 
    
     
