@@ -59,6 +59,7 @@ CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
    
     
     for(int i = 1; i < atoi(inFixOperations[0].dataType);i++){
+        printf("On %s Iteration:\n", inFixOperations[i].dataType);
         if(strcmp(inFixOperations[i].dataType, "AND") == 0){
             database1 = structPop(dataStack);
             database2 = structPop(dataStack);
@@ -67,8 +68,8 @@ CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
             structPush(dataStack, intersectData, sizeof(*intersectData));
 
 
-            freeDatabase(database1);
-            freeDatabase(database2);
+            //freeDatabase(database1);
+            //freeDatabase(database2);
         }
         else if(strcmp(inFixOperations[i].dataType, "OR") == 0){
             database1 = structPop(dataStack);
@@ -79,8 +80,8 @@ CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
 
             //shortPrintDatabase(unionData);
 
-            freeDatabase(database1);
-            freeDatabase(database2);
+            //freeDatabase(database1);
+            //freeDatabase(database2);
 
         } else{
             ComparisonObject dataType = strToObject(inFixOperations[i].dataType);
