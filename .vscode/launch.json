@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug C Program",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/OMPDataBase",  // Replace with your executable name
+            "stopAtEntry": true,
+            "args": [
+                "$(cat SQLCommand.txt)"   // Pass the contents of SQLCommand.txt as arguments
+            ],
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "build"  // Runs the 'build' task (make) before launching
+        }
+    ]
+}

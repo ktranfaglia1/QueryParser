@@ -8,7 +8,7 @@ OMPDataBase: $(OBJS)
 	$(CC) -o  $@ $(FLAG) $^
 
 %.o: %.c %.h
-	$(CC) -c -o $@ $<
+	$(CC) -c -o $@ $(FLAG) $<
 
 .PHONY: clean
 

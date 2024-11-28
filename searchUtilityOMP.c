@@ -7,15 +7,18 @@
 
 // Generalized filter function to return a filtered CarContainer
 CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOperation op, ComparisonObject obj) {
+   //d printf("Entered Find All\n");
     // Allocate space for the result container and initialize the CarContainer object
     CarContainer* results = (CarContainer*)malloc(sizeof(CarContainer));
     int capacity = 32;
     results->array = (Car*)malloc(capacity * sizeof(Car));
     results->size = 0;
-
+    //printf("Allocated Results Container\n");
     // Thread-local result containers
+
     CarContainer* local_results = (CarContainer*)calloc(omp_get_max_threads(), sizeof(CarContainer));
-    #pragma omp parallel shared(totalCapacity)
+    //printf("Starting Parallel Region\n");
+    #pragma omp parallel
     {
         int tid = omp_get_thread_num();
         local_results[tid].array = (Car*)malloc(capacity * sizeof(Car));
@@ -38,6 +41,7 @@ CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOper
         
 
     }
+    //printf("Through Parallel Portion\n");
     
     capacity = 32;
 
@@ -54,6 +58,7 @@ CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOper
         }
         free(local_results[i].array);  // Free thread-local arrays
     }
+
     free(local_results);  // Free the thread-local results container
 
     return results;
@@ -137,48 +142,55 @@ CarContainer* union_arrays(CarContainer* array1, CarContainer* array2) {
     }
 
     // Parallel processing of array2
-    #pragma omp parallel
-    {
-        int tid = omp_get_thread_num();
-        for (int i = 0; i < array2->size; i++) {
-            int found = 0;
+    
+        printf("Max Threads %d\n", max_threads);
+            #pragma omp parallel for
+            for (int i = 0; i < array2->size; i++) {
+                printf("Number of Threads %d\n",omp_get_num_threads());
+                int tid = omp_get_thread_num();
+                int found = 0;
 
-            // Check if the current car from array2 is already in array1
-            for (int j = 0; j < array1->size; j++) {
-                if (array2->array[i].ID == array1->array[j].ID) {
-                    found = 1;
-                    break;
+                // Check if the current car from array2 is already in array1
+                for (int j = 0; j < array1->size; j++) {
+                    if (array2->array[i].ID == array1->array[j].ID) {
+                        found = 1;
+                        break;
+                    }
+                }
+
+                //printf("tid %d: Array 2 Size: %d  Iteration: %d \n", tid, array2->size, i);
+                // Add to thread-local results if not found
+                if (!found) {
+                    local_results[tid].array[local_results[tid].size++] = copyCar(array2->array[i]);
                 }
             }
-
-            // Add to thread-local results if not found
-            if (!found) {
-                local_results[tid].array[local_results[tid].size++] = copyCar(array2->array[i]);
-            }
-        }
-    }
 
     // Merge thread-local results into the final result
     for (int t = 0; t < max_threads; t++) {
         for (int i = 0; i < local_results[t].size; i++) {
-            int found = 0;
+            //int found = 0;
+ 
 
-            // Check if the car is already in the global result
-            for (int j = 0; j < result->size; j++) {
+            /**
+             * This code is redundatn because if properly done the left database shouldn't have duplicates and we check if every element
+             * is in the right database therefore there arent any duplicates in global results
+             */
+            // Check if the car is already in the global result //It Cant this is redundant
+            /*for (int j = 0; j < result->size; j++) {
                 if (local_results[t].array[i].ID == result->array[j].ID) {
                     found = 1;
                     break;
                 }
-            }
+            }*/
 
             // Add to the global result if not found
-            if (!found) {
-                if (result->size == capacity) {
+            //if (!found) {
+                /*if (result->size == capacity) {
                     capacity *= 2;
                     result->array = (Car*)realloc(result->array, capacity * sizeof(Car));
-                }
+                }*/
                 result->array[result->size++] = copyCar(local_results[t].array[i]);
-            }
+            //}
         }
         free(local_results[t].array);  // Free thread-local arrays
     }
@@ -188,19 +200,23 @@ CarContainer* union_arrays(CarContainer* array1, CarContainer* array2) {
 
 // Intersection of two CarContainer arrays
 CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
+
     // Allocate space for the result container and initialize the CarContainer object
     CarContainer* result = (CarContainer*)malloc(sizeof(CarContainer));
     int capacity = 32;
     result->array = (Car*)malloc(capacity * sizeof(Car));
     result->size = 0;
+    
+
+    CarContainer* local_results = (CarContainer*)malloc(sizeof(CarContainer) * omp_get_max_threads());    
 
     // Parallel processing to find the intersection
-    #pragma omp parallel
+    #pragma omp parallel firstprivate(capacity)
     {
+        int tid = omp_get_thread_num();
         // Allocate and initialize thread-local result container
-        CarContainer local_result;
-        local_result.array = (Car*)malloc(capacity * sizeof(Car));
-        local_result.size = 0;
+        local_results[tid].array = (Car*)malloc(capacity * sizeof(Car));
+        local_results[tid].size = 0;
 
         // Divide work among threads
         #pragma omp for
@@ -209,28 +225,36 @@ CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
                 // Check for ID match
                 if (array1->array[i].ID == array2->array[j].ID) {
                     // Resize thread-local array if necessary
-                    if (local_result.size == capacity) {
+                    if (local_results[tid].size == capacity) {
                         capacity *= 2;
-                        local_result.array = (Car*)realloc(local_result.array, capacity * sizeof(Car));
+                        local_results[tid].array = (Car*)realloc(local_results[tid].array, capacity * sizeof(Car));
                     }
-                    local_result.array[local_result.size++] = copyCar(array1->array[i]);
+                    local_results[tid].array[local_results[tid].size++] = copyCar(array1->array[i]);
                     break;
                 }
             }
         }
-
-        // Merge thread-local results into the global result
-        #pragma omp critical
-        {
-            for (int i = 0; i < local_result.size; i++) {
+    }
+        capacity = 32;
+        // Merge thread-local results into the global result //TODO: PROPERLY FREE CARS
+        for(int tid = 0; tid < omp_get_max_threads(); tid++){
+            for (int i = 0; i < local_results[tid].size; i++) {
                 if (result->size == capacity) {
                     capacity *= 2;
                     result->array = (Car*)realloc(result->array, capacity * sizeof(Car));
                 }
-                result->array[result->size++] = copyCar(local_result.array[i]);
+                result->array[result->size++] = copyCar(local_results[tid].array[i]);
+                
             }
+            free(local_results[tid].array);  // Free thread-local array
         }
-        free(local_result.array);  // Free thread-local array
-    }
+        free(local_results);
+        
+            
+        
+    
+        
+        
+    
     return result;
 }
