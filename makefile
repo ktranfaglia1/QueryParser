@@ -1,10 +1,11 @@
 CC=gcc
 
 
-OBJS=serialMain.o parse.o QueryParsing.o searchUtility.o theDatabaser.o stringStack.o structStack.o
+OBJS=OMPMain.o parse.o QueryParsing.o searchUtilityOMP.o theDatabaser.o stringStack.o structStack.o
+FLAG=-fopenmp
 
-SerialDataBase: $(OBJS)
-	$(CC) -o $@ $^
+OMPDataBase: $(OBJS) 
+	$(CC) -o  $@ $(FLAG) $^
 
 %.o: %.c %.h
 	$(CC) -c -o $@ $<
@@ -12,4 +13,4 @@ SerialDataBase: $(OBJS)
 .PHONY: clean
 
 clean:
-	rm -f $(OBJS) SerialDataBase
+	rm -f $(OBJS) OMPDataBase

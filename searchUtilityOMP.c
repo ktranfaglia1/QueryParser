@@ -15,7 +15,7 @@ CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOper
 
     // Thread-local result containers
     CarContainer* local_results = (CarContainer*)calloc(omp_get_max_threads(), sizeof(CarContainer));
-    #pragma omp parallel
+    #pragma omp parallel shared(totalCapacity)
     {
         int tid = omp_get_thread_num();
         local_results[tid].array = (Car*)malloc(capacity * sizeof(Car));
@@ -35,10 +35,15 @@ CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOper
                 local_results[tid].array[local_results[tid].size++] = copyCar(car_data->array[i]);
             }
         }
+        
+
     }
+    
+    capacity = 32;
 
     // Merge thread-local results into the final results
     for (int i = 0; i < omp_get_max_threads(); i++) {
+        
         for (int j = 0; j < local_results[i].size; j++) {
             // Resize the global result array if necessary
             if (results->size == capacity) {

@@ -16,16 +16,18 @@ int main(int argc, char** argv) {
 
         //Select Command Runs 
         CarContainer* database = createDatabase(parameters[i * 3 + 1][1]);
-
         
 
         //Converts Operations to postFix
         opTuple* postFix = where(parameters[i * 3 + 2]);
+        
 
         
 
         //Runs Operations Accordingly
         database = callOperations(database, postFix); 
+    
+    
 
         //Outputs Database with proper columns
         printDatabase(database, parameters[i * 3]);

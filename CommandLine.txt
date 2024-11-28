@@ -1,1 +1,1 @@
-./SerialDataBase $(cat SQLCommand.txt)
+./OMPDataBase $(cat SQLCommand.txt)
