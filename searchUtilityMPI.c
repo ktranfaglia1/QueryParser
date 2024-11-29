@@ -295,6 +295,8 @@ CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
 }
 
 
+
+
 void sendCarContainer(CarContainer* container, int dest, int tag, MPI_Comm comm) {
     // Send the size of the container
     MPI_Send(&(container->size), 1, MPI_INT, dest, tag, comm);
@@ -322,3 +324,36 @@ void sendCarContainer(CarContainer* container, int dest, int tag, MPI_Comm comm)
         MPI_Send(car->Dealer, dealer_len, MPI_CHAR, dest, tag, comm);
     }
 }
+
+
+CarContainer* recvCarContainer(int source, int tag, MPI_Comm comm){
+    CarContainer* container = (CarContainer *)malloc(sizeof(CarContainer));
+    MPI_Status status;
+    MPI_Recv(&(container->size), 1, MPI_INT, source, tag, comm, &status);
+
+    container->array = (Car*)malloc(sizeof(Car) * container->size);
+
+    for(int i = 0; i < container->size; i++){
+        Car* car = &(container->array[i]);
+        
+        
+        // Send integer fields
+        MPI_Recv(&(car->ID), 1, MPI_INT, source, tag, comm, &status);
+        MPI_Recv(&(car->Price), 1, MPI_INT, source, tag, comm, &status);
+        MPI_Recv(&(car->YearMake), 1, MPI_INT, source, tag, comm, &status);
+
+        // Send string fields (length + content)
+        int model_len; // Include null-terminator
+        MPI_Recv(&model_len, 1, MPI_INT, source, tag, comm, &status);
+        MPI_Recv(car->Model, model_len, MPI_CHAR, source, tag, comm, &status);
+
+        int color_len;
+        MPI_Recv(&color_len, 1, MPI_INT, source, tag, comm, &status);
+        MPI_Recv(car->Color, color_len, MPI_CHAR, source, tag, comm, &status);
+
+        int dealer_len;
+        MPI_Recv(&dealer_len, 1, MPI_INT, source, tag, comm, &status);
+        MPI_Recv(car->Dealer, dealer_len, MPI_CHAR, source, tag, comm, &status);
+    }
+}
+

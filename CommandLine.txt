@@ -1,1 +1,1 @@
-./SerialDataBase $(cat SQLCommand.txt)
+./MPIDataBase $(cat SQLCommand.txt)
