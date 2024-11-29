@@ -148,12 +148,12 @@ CarContainer* union_arrays(CarContainer* array1, CarContainer* array2) {
             //printf("TID: %d\n", i);
 
             // Check if the current car from array2 is already in array1
-            /*for (int j = 0; j < array1->size; j++) {
+            for (int j = 0; j < array1->size; j++) {
                 if (array2->array[i].ID == array1->array[j].ID) {
                     found = 1;
                     break;
                 }
-            }*/
+            }
 
             //printf("tid %d: Array 2 Size: %d  Iteration: %d \n", tid, array2->size, i);
             // Add to thread-local results if not found
