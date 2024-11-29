@@ -17,8 +17,7 @@ CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOper
     // Thread-local result containers
 
     CarContainer* local_results = (CarContainer*)calloc(omp_get_max_threads(), sizeof(CarContainer));
-    //printf("Starting Parallel Region\n");
-    #pragma omp parallel
+    #pragma omp parallel firstprivate(capacity)
     {
         int tid = omp_get_thread_num();
         local_results[tid].array = (Car*)malloc(capacity * sizeof(Car));
@@ -32,7 +31,7 @@ CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOper
                 // Resize array if capacity is met
                 if (local_results[tid].size == capacity) {
                     capacity *= 2;
-                    local_results[tid].array = (Car*)realloc(local_results[tid].array, capacity * sizeof(Car));
+                    local_results[tid].array = (Car*)realloc(local_results[tid].array, capacity * sizeof(Car)); //Breaks here
                 }
                 // Use copyCar to ensure a deep copy of the car object
                 local_results[tid].array[local_results[tid].size++] = copyCar(car_data->array[i]);
@@ -41,7 +40,6 @@ CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOper
         
 
     }
-    //printf("Through Parallel Portion\n");
     
     capacity = 32;
 
@@ -143,27 +141,26 @@ CarContainer* union_arrays(CarContainer* array1, CarContainer* array2) {
 
     // Parallel processing of array2
     
-        printf("Max Threads %d\n", max_threads);
-            #pragma omp parallel for
-            for (int i = 0; i < array2->size; i++) {
-                printf("Number of Threads %d\n",omp_get_num_threads());
-                int tid = omp_get_thread_num();
-                int found = 0;
+        #pragma omp parallel for
+        for (int i = 0; i < array2->size; i++) {
+            int tid = omp_get_thread_num();
+            int found = 0;
+            //printf("TID: %d\n", i);
 
-                // Check if the current car from array2 is already in array1
-                for (int j = 0; j < array1->size; j++) {
-                    if (array2->array[i].ID == array1->array[j].ID) {
-                        found = 1;
-                        break;
-                    }
+            // Check if the current car from array2 is already in array1
+            /*for (int j = 0; j < array1->size; j++) {
+                if (array2->array[i].ID == array1->array[j].ID) {
+                    found = 1;
+                    break;
                 }
+            }*/
 
-                //printf("tid %d: Array 2 Size: %d  Iteration: %d \n", tid, array2->size, i);
-                // Add to thread-local results if not found
-                if (!found) {
-                    local_results[tid].array[local_results[tid].size++] = copyCar(array2->array[i]);
-                }
+            //printf("tid %d: Array 2 Size: %d  Iteration: %d \n", tid, array2->size, i);
+            // Add to thread-local results if not found
+            if (!found) {
+                local_results[tid].array[local_results[tid].size++] = copyCar(array2->array[i]);
             }
+        }
 
     // Merge thread-local results into the final result
     for (int t = 0; t < max_threads; t++) {

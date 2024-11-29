@@ -47,7 +47,6 @@ CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
    
     
     for(int i = 1; i < atoi(inFixOperations[0].dataType);i++){
-        printf("On %s Iteration:\n", inFixOperations[i].dataType);
         if(strcmp(inFixOperations[i].dataType, "AND") == 0){
             database1 = structPop(dataStack);
             database2 = structPop(dataStack);

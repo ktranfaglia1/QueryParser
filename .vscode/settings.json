@@ -6,6 +6,7 @@
         "queryparsing.h": "c",
         "string.h": "c",
         "thedatabaser.h": "c",
-        "algorithm": "c"
+        "algorithm": "c",
+        "vector": "c"
     }
 }
