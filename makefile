@@ -1,9 +1,9 @@
-CC=gcc
+CC=mpicc
 
+finalFile=MPIDataBase
+OBJS=MPIMain.o parse.o QueryParsing.o searchUtilityMPI.o theDatabaser.o stringStack.o structStack.o
 
-OBJS=serialMain.o parse.o QueryParsing.o searchUtility.o theDatabaser.o stringStack.o structStack.o
-
-SerialDataBase: $(OBJS)
+$(finalFile): $(OBJS)
 	$(CC) -o $@ $^
 
 %.o: %.c %.h
@@ -12,4 +12,4 @@ SerialDataBase: $(OBJS)
 .PHONY: clean
 
 clean:
-	rm -f $(OBJS) SerialDataBase
+	rm -f $(OBJS) $(finalFile)

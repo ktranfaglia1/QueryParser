@@ -5,27 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <mpi.h>
-#include "theDatabaser.c"
+#include "theDatabaser.h"
 
-// Comparison operations
-typedef enum {
-    GREATER_THAN,
-    GREATER_EQUAL,
-    LESS_THAN,
-    LESS_EQUAL,
-    EQUAL_TO,
-    NOT_EQUAL_TO,
-} ComparisonOperation;
 
-// Comparison objects
-typedef enum {
-    ID,
-    MODEL,
-    MAKE,
-    COLOR,
-    PRICE,
-    DEALER,
-} ComparisonObject;
 
 // Function prototypes
 int compare_int(int a, int b, ComparisonOperation op);

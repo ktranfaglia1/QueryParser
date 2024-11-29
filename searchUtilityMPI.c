@@ -322,31 +322,3 @@ void sendCarContainer(CarContainer* container, int dest, int tag, MPI_Comm comm)
         MPI_Send(car->Dealer, dealer_len, MPI_CHAR, dest, tag, comm);
     }
 }
-
-void sendCarContainer(CarContainer* container, int dest, int tag, MPI_Comm comm) {
-    // Send the size of the container
-    MPI_Send(&(container->size), 1, MPI_INT, dest, tag, comm);
-
-    // Send the data for each car in the container
-    for (int i = 0; i < container->size; i++) {
-        Car* car = &(container->array[i]);
-        
-        // Send integer fields
-        MPI_Send(&(car->ID), 1, MPI_INT, dest, tag, comm);
-        MPI_Send(&(car->Price), 1, MPI_INT, dest, tag, comm);
-        MPI_Send(&(car->YearMake), 1, MPI_INT, dest, tag, comm);
-
-        // Send string fields (length + content)
-        int model_len = strlen(car->Model) + 1; // Include null-terminator
-        MPI_Send(&model_len, 1, MPI_INT, dest, tag, comm);
-        MPI_Send(car->Model, model_len, MPI_CHAR, dest, tag, comm);
-
-        int color_len = strlen(car->Color) + 1;
-        MPI_Send(&color_len, 1, MPI_INT, dest, tag, comm);
-        MPI_Send(car->Color, color_len, MPI_CHAR, dest, tag, comm);
-
-        int dealer_len = strlen(car->Dealer) + 1;
-        MPI_Send(&dealer_len, 1, MPI_INT, dest, tag, comm);
-        MPI_Send(car->Dealer, dealer_len, MPI_CHAR, dest, tag, comm);
-    }
-}
