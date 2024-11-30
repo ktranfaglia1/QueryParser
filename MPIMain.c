@@ -4,6 +4,8 @@
 
 int main(int argc, char** argv) {
     
+
+    MPI_Init(&argc, &argv);
     int numQueries = 0;
     //Turns Parameter into Parsed Array
     char*** parameters = getParams(argc, argv, &numQueries); 
@@ -33,4 +35,6 @@ int main(int argc, char** argv) {
         //Frees Memory
         freeDatabase(database);
     }
+
+    MPI_Finalize();
 }
