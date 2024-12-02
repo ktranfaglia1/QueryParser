@@ -7,7 +7,7 @@ This will populate a file containing a car database. The next step is to set up 
 A sample of which is provided already but in order to create your own the formatting is as follows:
   1. You need the keywords SELECT, FROM, and WHERE all on their own lines
   2. After SELECT you will want a list of features that will print out when the query locates the cars being searched for.
-    a) The list of features is as follows: ID, Model, YearMake, Color, Price, Dealer
+    a) The list of features is as follows (Case Sensitive): ID, Model, YearMake, Color, Price, Dealer
     ex. SELECT ID, Model, YearMake, Color 
   3. After FROM you will want to input the name of the database file
     ex. FROM car_inventory
