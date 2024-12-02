@@ -1,10 +1,10 @@
-#ifndef SEARCHUTILITYMPI_H
-#define SEARCHUTILITYMPI_H
+#ifndef SEARCHUTILITYOMP_H
+#define SEARCHUTILITYOMP_H
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <mpi.h>
+#include <omp.h>
 #include "theDatabaser.c"
 
 // Comparison operations
@@ -35,9 +35,5 @@ int condition(const Car* car, const void* value, ComparisonOperation op, Compari
 CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOperation op, ComparisonObject obj);
 CarContainer* union_arrays(CarContainer* array1, CarContainer* array2);
 CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2);
-
-// Helper functions
-void sendCarContainer(CarContainer* container, int dest, int tag, MPI_Comm comm);
-CarContainer* recvCarContainer(int source, int tag, MPI_Comm comm);
 
 #endif
