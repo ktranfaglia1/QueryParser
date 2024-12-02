@@ -9,15 +9,14 @@
 CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOperation op, ComparisonObject obj) {
     // Allocate space for the result container and initialize the CarContainer object
     CarContainer* results = (CarContainer*)malloc(sizeof(CarContainer));
-    int capacity = 32;
-
+    int capacity = 64;
     results->array = (Car*)malloc(capacity * sizeof(Car)); //::Breaks HERE::
-    
     results->size = 0;
+    results->capacity = capacity;
+
     // Traverse each car in the container
     for (int i = 0; i < car_data->size; i++) {
         Car* current = &car_data->array[i];  // Extract a car
-        //printf("%d\n", condition(current, value, op, obj)); // current 0
         // Check if the car meets the condition
         if (condition(current, value, op, obj)) {
             // Resize array if capacity has been met
@@ -25,8 +24,7 @@ CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOper
                 capacity *= 2;
                 results->array = (Car*)realloc(results->array, capacity * sizeof(Car));
             }
-            results->array[results->size++] = copyCar(*current);
-            //results->array[results->size++] = *current; // Add car to the result
+            results->array[results->size++] = copyCar(*current);  // Use copyCar to ensure deep copying
         }
     }
 
@@ -95,11 +93,11 @@ int condition(const Car* car, const void* value, ComparisonOperation op, Compari
 CarContainer* union_arrays(CarContainer* array1, CarContainer* array2) {
     // Allocate space for the result container and initialize the CarContainer object
     CarContainer* result = (CarContainer*)malloc(sizeof(CarContainer));
-    result->array = (Car*)malloc((array1->size + array2->size) * sizeof(Car));
+    int capacity = array1->size + array2->size;
+    result->array = (Car*)malloc((capacity) * sizeof(Car));
     result->size = 0;
+    result->capacity = capacity;
 
-
-    //printf("Array 2 Size: %d\n", array2->size);
     // Add all cars from the first array to the result
     for (int i = 0; i < array1->size; i++) {
         result->array[result->size++] = copyCar(array1->array[i]);
@@ -127,8 +125,10 @@ CarContainer* union_arrays(CarContainer* array1, CarContainer* array2) {
 CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
     // Allocate space for the result container and initialize the CarContainer object
     CarContainer* result = (CarContainer*)malloc(sizeof(CarContainer));
-    result->array = (Car*)malloc((array1->size < array2->size ? array1->size : array2->size) * sizeof(Car));
+    int capacity = 64;
+    result->array = (Car*)malloc(capacity * sizeof(Car));
     result->size = 0;
+    result->capacity = capacity;
 
     // Iterate through the first array
     for (int i = 0; i < array1->size; i++) {
@@ -136,6 +136,10 @@ CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
         for (int j = 0; j < array2->size; j++) {
             // If found, add the car to the result
             if (array1->array[i].ID == array2->array[j].ID) {
+                if (result->size == result->capacity) {
+                    result->capacity *= 2;
+                    result->array = (Car*)realloc(result->array, result->capacity * sizeof(Car));
+                }
                 result->array[result->size++] = copyCar(array2->array[j]);
                 break;
             }
