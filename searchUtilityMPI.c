@@ -1,6 +1,6 @@
 /* Author: Kyle Tranfaglia
 *  COSC420: Parallel Database Query Processing System Project
-*  Last updated 11/26/24
+*  Last updated 12/01/24
 *  This program contains a parallel search utility functions to return a list of all entires that meet a certain criteria using MPI
 */
 #include "searchUtilityMPI.h"
@@ -323,30 +323,42 @@ void sendCarContainer(CarContainer* container, int dest, int tag, MPI_Comm comm)
     }
 }
 
-void sendCarContainer(CarContainer* container, int dest, int tag, MPI_Comm comm) {
-    // Send the size of the container
-    MPI_Send(&(container->size), 1, MPI_INT, dest, tag, comm);
+CarContainer* recvCarContainer(int source, int tag, MPI_Comm comm) {
+    // Allocate memory for the container
+    CarContainer* container = (CarContainer*)malloc(sizeof(CarContainer));
+    MPI_Status status;
 
-    // Send the data for each car in the container
+    // Receive the size of the container
+    MPI_Recv(&(container->size), 1, MPI_INT, source, tag, comm, &status);
+
+    // Allocate memory for the cars in the container
+    container->array = (Car*)malloc(container->size * sizeof(Car));
+
     for (int i = 0; i < container->size; i++) {
         Car* car = &(container->array[i]);
-        
-        // Send integer fields
-        MPI_Send(&(car->ID), 1, MPI_INT, dest, tag, comm);
-        MPI_Send(&(car->Price), 1, MPI_INT, dest, tag, comm);
-        MPI_Send(&(car->YearMake), 1, MPI_INT, dest, tag, comm);
 
-        // Send string fields (length + content)
-        int model_len = strlen(car->Model) + 1; // Include null-terminator
-        MPI_Send(&model_len, 1, MPI_INT, dest, tag, comm);
-        MPI_Send(car->Model, model_len, MPI_CHAR, dest, tag, comm);
+        // Receive integer fields
+        MPI_Recv(&(car->ID), 1, MPI_INT, source, tag, comm, &status);
+        MPI_Recv(&(car->Price), 1, MPI_INT, source, tag, comm, &status);
+        MPI_Recv(&(car->YearMake), 1, MPI_INT, source, tag, comm, &status);
 
-        int color_len = strlen(car->Color) + 1;
-        MPI_Send(&color_len, 1, MPI_INT, dest, tag, comm);
-        MPI_Send(car->Color, color_len, MPI_CHAR, dest, tag, comm);
+        // Receive string fields (length + content)
+        int model_len;
+        MPI_Recv(&model_len, 1, MPI_INT, source, tag, comm, &status);
+        car->Model = (char*)malloc(model_len);
+        MPI_Recv(car->Model, model_len, MPI_CHAR, source, tag, comm, &status);
 
-        int dealer_len = strlen(car->Dealer) + 1;
-        MPI_Send(&dealer_len, 1, MPI_INT, dest, tag, comm);
-        MPI_Send(car->Dealer, dealer_len, MPI_CHAR, dest, tag, comm);
+        int color_len;
+        MPI_Recv(&color_len, 1, MPI_INT, source, tag, comm, &status);
+        car->Color = (char*)malloc(color_len);
+        MPI_Recv(car->Color, color_len, MPI_CHAR, source, tag, comm, &status);
+
+        int dealer_len;
+        MPI_Recv(&dealer_len, 1, MPI_INT, source, tag, comm, &status);
+        car->Dealer = (char*)malloc(dealer_len);
+        MPI_Recv(car->Dealer, dealer_len, MPI_CHAR, source, tag, comm, &status);
     }
+
+    return container;
 }
+

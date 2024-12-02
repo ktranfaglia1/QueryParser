@@ -12,6 +12,7 @@ typedef struct Car {
 
 typedef struct CarContainer {
 	int size;
+	int capacity;
 	Car *array;
 } CarContainer;
 
