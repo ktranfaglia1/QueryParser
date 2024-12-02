@@ -21,6 +21,7 @@ typedef struct opTuple{
 CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations);
 ComparisonOperation opToEnum(char* opString);
 void* objectToDataType(char* objectString, ComparisonObject compareObject);
+ComparisonObject strToObject(char* opString);
 
 
 #endif

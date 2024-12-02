@@ -88,6 +88,28 @@ CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
     return finalResult;
 }
 
+ComparisonObject strToObject(char* opString){
+    ComparisonObject finalObject;
+
+    if (strcmp(opString, "ID") == 0){
+        finalObject = ID;
+    } else if (strcmp(opString, "Model") == 0){
+        finalObject = MODEL;
+    }  else if (strcmp(opString, "YearMake") == 0){
+        finalObject = MAKE;
+    }  else if (strcmp(opString, "Color") == 0){
+        finalObject = COLOR;
+    }  else if (strcmp(opString, "Price") == 0){
+        finalObject = PRICE;
+    }  else{
+        finalObject = DEALER;
+    } 
+    
+
+
+
+    return finalObject;
+}
 
 /**
  * \fn callOperations
