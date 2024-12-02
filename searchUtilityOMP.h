@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <omp.h>
-#include "theDatabaser.h"
+#include "theDatabaser.c"
 
 // Comparison operations
 typedef enum {
