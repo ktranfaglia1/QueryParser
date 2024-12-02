@@ -1,3 +1,6 @@
+For 1000000 tuples and the following query:
 SELECT ID, Model, YearMake, Color 
 FROM car_inventory 
 WHERE Model="accord" AND YearMake="2015" AND (Color="blue" OR Color="gray");
+Query ran in 9.867368 seconds
+
