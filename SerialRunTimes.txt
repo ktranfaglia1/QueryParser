@@ -4,3 +4,10 @@ FROM car_inventory
 WHERE Model="accord" AND YearMake="2015" AND (Color="blue" OR Color="gray");
 Query took 12.822353 seconds
 
+Cars: 100000
+Query:
+SELECT ID, Model, YearMake, Color 
+FROM car_inventory 
+WHERE Model="accord" AND YearMake="2015" AND (Color="blue" OR Color="gray");
+0.201965 seconds
+
