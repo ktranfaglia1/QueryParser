@@ -4,3 +4,67 @@ FROM car_inventory
 WHERE Model="accord" AND YearMake="2015" AND (Color="blue" OR Color="gray");
 Query ran in 9.867368 seconds
 
+Cars: 100000
+Threads: 2
+Query: 
+SELECT ID, Model, YearMake, Color 
+FROM car_inventory 
+WHERE Model="accord" AND YearMake="2015" AND (Color="blue" OR Color="gray");
+Time: 0.156684 seconds
+
+Cars: 100000
+Threads: 4
+Query: 
+SELECT ID, Model, YearMake, Color 
+FROM car_inventory 
+WHERE Model="accord" AND YearMake="2015" AND (Color="blue" OR Color="gray");
+Time: 0.157535 seconds
+
+Cars: 100000
+Threads: 8
+Query: 
+SELECT ID, Model, YearMake, Color 
+FROM car_inventory 
+WHERE Model="accord" AND YearMake="2015" AND (Color="blue" OR Color="gray");
+Time: 0.166883 seconds
+
+Cars: 100000
+Threads: 16
+Query: 
+SELECT ID, Model, YearMake, Color 
+FROM car_inventory 
+WHERE Model="accord" AND YearMake="2015" AND (Color="blue" OR Color="gray");
+Time: 0.176268 seconds
+
+Cars: 200000
+Threads: 2
+Query: 
+SELECT ID, Model, YearMake, Color 
+FROM car_inventory 
+WHERE Model="accord" AND YearMake="2015" AND (Color="blue" OR Color="gray");
+Time: 0.509656 seconds
+
+Cars: 400000
+Threads: 4
+Query: 
+SELECT ID, Model, YearMake, Color 
+FROM car_inventory 
+WHERE Model="accord" AND YearMake="2015" AND (Color="blue" OR Color="gray");
+Time: 1.629000 seconds
+
+Cars: 800000
+Threads: 8
+Query: 
+SELECT ID, Model, YearMake, Color 
+FROM car_inventory 
+WHERE Model="accord" AND YearMake="2015" AND (Color="blue" OR Color="gray");
+Time: 6.672177 seconds
+
+Cars: 1600000
+Threads: 16
+Query: 
+SELECT ID, Model, YearMake, Color 
+FROM car_inventory 
+WHERE Model="accord" AND YearMake="2015" AND (Color="blue" OR Color="gray");
+Time: 25.159900 seconds
+
