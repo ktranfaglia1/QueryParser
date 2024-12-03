@@ -36,8 +36,4 @@ CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOper
 CarContainer* union_arrays(CarContainer* array1, CarContainer* array2);
 CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2);
 
-// Helper functions
-void sendCarContainer(CarContainer* container, int dest, int tag, MPI_Comm comm);
-CarContainer* recvCarContainer(int source, int tag, MPI_Comm comm);
-
 #endif
