@@ -8,80 +8,78 @@
 #define TAG_DATA 0
 #define TAG_RESULTS 1
 
-// Generalized filter function using MPI to return a filtered CarContainer using MPI
+// Generalized filter function using MPI to return a filtered CarContainer based on a given condition
 CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOperation op, ComparisonObject obj) {
     // Initialize MPI environment
     int rank, size;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-    // Split the work across processes
+    // Calculate the portion of the data each process is responsible for and divide the car_data array into nearly equal parts among all processes
     int local_start = (rank * car_data->size) / size;
     int local_end = ((rank + 1) * car_data->size) / size;
 
-    // Local results container
+    // Allocate a container to store local results that match the condition
     CarContainer* local_results = (CarContainer*)malloc(sizeof(CarContainer));
     local_results->array = (Car*)malloc((local_end - local_start) * sizeof(Car));
     local_results->size = 0;
 
-    // Process its portion of the data
+    // Iterate through the assigned portion of the car_data array
     for (int i = local_start; i < local_end; i++) {
         Car* current = &car_data->array[i];
+        // Check if the current car satisfies the given condition
         if (condition(current, value, op, obj)) {
             local_results->array[local_results->size++] = copyCar(*current);
         }
     }
 
-     // Non-blocking send of the size of the local results to rank 0
-    MPI_Request send_request;
-    MPI_Isend(&local_results->size, 1, MPI_INT, 0, TAG_RESULTS, MPI_COMM_WORLD, &send_request);
+    // Get the size of local results for this process
+    int local_size = local_results->size;
+    int* recv_sizes = NULL;  // Array to store sizes of local results from all processes
+    int* displs = NULL;  // Array to store displacements for gathering data
+    CarContainer* final_results = NULL;  // Container to hold the final merged results on rank 0
 
-    // Rank 0 prepares to receive results from all processes
-    int* recv_sizes = NULL;
-    int* displs = NULL;
-    CarContainer* final_results = NULL;
-
-    // Master process
+    // Master process (rank 0) prepares to gather data
     if (rank == 0) {
-        // Allocate memory for sizes and displacements
-        recv_sizes = (int*)malloc(size * sizeof(int));
-        displs = (int*)malloc(size * sizeof(int));
+        recv_sizes = (int*)malloc(size * sizeof(int));  // Allocate memory to store sizes from all ranks
+        displs = (int*)malloc(size * sizeof(int));  // Allocate memory to store displacements
+    }
 
-        // Initialize the final results container
-        final_results = (CarContainer*)malloc(sizeof(CarContainer));
-        final_results->array = (Car*)malloc(car_data->size * sizeof(Car));
-        final_results->size = 0;
+    // Gather the sizes of local results from all processes to rank 0
+    MPI_Gather(&local_size, 1, MPI_INT, recv_sizes, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
-        // Non-blocking receive for sizes of local results from all processes
-        MPI_Request* recv_requests = (MPI_Request*)malloc(size * sizeof(MPI_Request));
-        for (int i = 0; i < size; i++) {
-            MPI_Irecv(&recv_sizes[i], 1, MPI_INT, i, TAG_RESULTS, MPI_COMM_WORLD, &recv_requests[i]);
-        }
-        MPI_Waitall(size, recv_requests, MPI_STATUSES_IGNORE);  // Wait for all size information to be received
-
-        // Calculate displacements for the gathered data
+    // Master Process
+    if (rank == 0) {
+        // Convert sizes from element counts to byte sizes for MPI_Gatherv
         int total_size = 0;
         for (int i = 0; i < size; i++) {
-            displs[i] = total_size;
-            total_size += recv_sizes[i];
+            recv_sizes[i] *= sizeof(Car);  // Convert each size to bytes
+            displs[i] = total_size;  // Calculate displacement for each rank's data
+            total_size += recv_sizes[i];  // Accumulate total size for final results
         }
-        final_results->size = total_size;
 
-        // Receive the actual data from all processes
-        MPI_Irecv(final_results->array, total_size * sizeof(Car), MPI_BYTE, MPI_ANY_SOURCE, TAG_RESULTS, MPI_COMM_WORLD, &send_request);
-        free(recv_requests);
+        // Allocate memory for the final results container
+        final_results = (CarContainer*)malloc(sizeof(CarContainer));
+        final_results->array = (Car*)malloc(total_size);  // Allocate memory for all gathered data
+        final_results->size = total_size / sizeof(Car);  // Convert total size back to number of elements
     }
-    MPI_Wait(&send_request, MPI_STATUS_IGNORE);  // Ensure non-blocking send completes before local process continues
 
-    // Free resources
+    // Gather the actual filtered results from all processes into the final results container on rank 0
+    MPI_Gatherv(local_results->array, local_size * sizeof(Car), MPI_BYTE,
+                final_results->array, recv_sizes, displs, MPI_BYTE,
+                0, MPI_COMM_WORLD);
+
+    // Free memory used for local results on all processes
     free(local_results->array);
     free(local_results);
+
+    // Master process frees memory allocated for gather-related arrays
     if (rank == 0) {
         free(recv_sizes);
         free(displs);
     }
 
-    return final_results;
+    return rank == 0 ? final_results : NULL;  // Return the final results on rank 0, NULL on other ranks
 }
 
 
