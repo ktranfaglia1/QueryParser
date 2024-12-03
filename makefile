@@ -1,7 +1,7 @@
 CC=gcc
 
 
-OBJS=OMPMain.o parse.o QueryParsing.o searchUtilityOMP.o theDatabaser.o stringStack.o structStack.o
+OBJS=QPEOMP.o parse.o QueryParsing.o searchUtilityOMP.o theDatabaser.o stringStack.o structStack.o
 FLAG=-fopenmp
 
 OMPDataBase: $(OBJS) 
