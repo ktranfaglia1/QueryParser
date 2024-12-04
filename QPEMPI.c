@@ -5,14 +5,16 @@
 
 int main(int argc, char** argv) {
 
-    MPI_Init(&argc, &argv);
+    
     int numQueries = 0;
     
     // Turns Parameter into Parsed Array
     char*** parameters = getParams(argc, argv, &numQueries); 
 
-    double totalStartTime = MPI_Wtime();  // Start total timer
+    
+    MPI_Init(&argc, &argv);
 
+    double totalStartTime = MPI_Wtime();  // Start total timer
     for(int i = 0; i < numQueries; i++) {
 
         printf("\nQuery %d\n\n", i);

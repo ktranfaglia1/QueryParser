@@ -4,4 +4,4 @@ WHERE Model="accord" AND YearMake="2015" AND (Color="blue" OR Color="gray")
 
 SELECT ID, Model, YearMake, Color
 FROM car_inventory
-WHERE Model="accord" AND (YearMake="2015" OR (Color="blue" AND Color="gray"));
+WHERE Model="accord" AND (YearMake="2015" OR (Color="blue" AND Color="gray"))
