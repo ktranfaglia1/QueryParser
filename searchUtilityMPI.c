@@ -20,6 +20,7 @@ CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOper
     int local_start = (rank * car_data->size) / size;
     int local_end = ((rank + 1) * car_data->size) / size;
 
+    
     // Allocate a container to store local results that match the condition
     CarContainer* local_results = (CarContainer*)malloc(sizeof(CarContainer));
     local_results->array = (Car*)malloc((local_end - local_start) * sizeof(Car));
@@ -47,8 +48,9 @@ CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOper
     }
 
     // Gather the sizes of local results from all processes to rank 0
+    
     MPI_Gather(&local_size, 1, MPI_INT, recv_sizes, 1, MPI_INT, 0, MPI_COMM_WORLD);
-
+    
     // Master Process
     if (rank == 0) {
         // Convert sizes from element counts to byte sizes for MPI_Gatherv
@@ -64,12 +66,15 @@ CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOper
         final_results->array = (Car*)malloc(total_size);  // Allocate memory for all gathered data
         final_results->size = total_size / sizeof(Car);  // Convert total size back to number of elements
     }
-
+printf("Checkpoint 1\n");
     // Gather the actual filtered results from all processes into the final results container on rank 0
-    MPI_Gatherv(local_results->array, local_size * sizeof(Car), MPI_BYTE,
-                final_results->array, recv_sizes, displs, MPI_BYTE,
+    
+    printf("%d\n", local_size * (int)sizeof(Car));
+    printf("Checkpoint 1.5\n");
+    MPI_Gatherv(local_results->array, local_size * (int)(sizeof(Car)), MPI_BYTE,
+                final_results ? final_results->array : NULL,  recv_sizes, displs, MPI_BYTE,
                 0, MPI_COMM_WORLD);
-
+printf("Checkpoint 2\n");
     // Free memory used for local results on all processes
     free(local_results->array);
     free(local_results);
