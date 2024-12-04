@@ -6,6 +6,11 @@
         "queryparsing.h": "c",
         "string.h": "c",
         "thedatabaser.h": "c",
-        "algorithm": "c"
+        "algorithm": "c",
+        "array": "c",
+        "functional": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "utility": "c"
     }
 }

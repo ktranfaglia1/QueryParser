@@ -36,4 +36,6 @@ CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOper
 CarContainer* union_arrays(CarContainer* array1, CarContainer* array2);
 CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2);
 
+CarContainer* broadcastDatabase(CarContainer *container);
+
 #endif

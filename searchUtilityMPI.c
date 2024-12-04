@@ -10,11 +10,18 @@
 
 // Generalized filter function using MPI to return a filtered CarContainer based on a given condition
 CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOperation op, ComparisonObject obj) {
-    printf("Find Start\n");
+    printf("Start of BCAST\n");
+    
     // Initialize MPI environment
     int rank, size;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+
+    //printf("Test rank %d\n",rank);
+    //printf("ptr. Card Data %p First Car %p Car String %s rank %d\n", car_data, car_data->array, car_data->array[0].Color, rank);
+    //MPI_Bcast(&car_data, sizeof(car_data), MPI_BYTE, 0, MPI_COMM_WORLD);
+    
 
     // Calculate the portion of the data each process is responsible for and divide the car_data array into nearly equal parts among all processes
     int local_start = (rank * car_data->size) / size;
@@ -26,6 +33,7 @@ CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOper
     local_results->array = (Car*)malloc((local_end - local_start) * sizeof(Car));
     local_results->size = 0;
 
+    
     // Iterate through the assigned portion of the car_data array
     for (int i = local_start; i < local_end; i++) {
         Car* current = &car_data->array[i];
@@ -35,22 +43,23 @@ CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOper
         }
     }
 
+    
+    
     // Get the size of local results for this process
     int local_size = local_results->size;
     int* recv_sizes = NULL;  // Array to store sizes of local results from all processes
     int* displs = NULL;  // Array to store displacements for gathering data
     CarContainer* final_results = NULL;  // Container to hold the final merged results on rank 0
-
+    
     // Master process (rank 0) prepares to gather data
     if (rank == 0) {
         recv_sizes = (int*)malloc(size * sizeof(int));  // Allocate memory to store sizes from all ranks
         displs = (int*)malloc(size * sizeof(int));  // Allocate memory to store displacements
     }
-
+    
     // Gather the sizes of local results from all processes to rank 0
-    
+
     MPI_Gather(&local_size, 1, MPI_INT, recv_sizes, 1, MPI_INT, 0, MPI_COMM_WORLD);
-    
     // Master Process
     if (rank == 0) {
         // Convert sizes from element counts to byte sizes for MPI_Gatherv
@@ -66,15 +75,15 @@ CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOper
         final_results->array = (Car*)malloc(total_size);  // Allocate memory for all gathered data
         final_results->size = total_size / sizeof(Car);  // Convert total size back to number of elements
     }
-printf("Checkpoint 1\n");
+
     // Gather the actual filtered results from all processes into the final results container on rank 0
     
-    printf("%d\n", local_size * (int)sizeof(Car));
-    printf("Checkpoint 1.5\n");
+
+  
     MPI_Gatherv(local_results->array, local_size * (int)(sizeof(Car)), MPI_BYTE,
                 final_results ? final_results->array : NULL,  recv_sizes, displs, MPI_BYTE,
                 0, MPI_COMM_WORLD); //Problem:: final_results array caused Segfault not defined outside of root
-printf("Checkpoint 2\n");
+
     // Free memory used for local results on all processes
     free(local_results->array);
     free(local_results);
@@ -85,8 +94,14 @@ printf("Checkpoint 2\n");
         free(displs);
     }
 
-    MPI_Bcast(&final_results, sizeof(final_results), MPI_BYTE, 0, MPI_COMM_WORLD);
-    printf("Find End\n");
+    if(!final_results)
+        final_results = (CarContainer*)malloc(sizeof(CarContainer));
+    //final_results = broadcastDatabase(final_results);
+//    MPI_Bcast(&final_results, sizeof(final_results), MPI_BYTE, 0, MPI_COMM_WORLD); //Allows for all threads to raturn database
+    final_results = broadcastDatabase(final_results);
+
+    printf("End of BCAST\n");
+    
     return final_results;  // Return the final results on rank 0, NULL on other ranks
 }
 
@@ -291,7 +306,7 @@ CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
     // Rank 0 prepares to merge the results
     CarContainer* final_results = NULL;
     if (rank == 0) {
-        final_results = (CarContainer*)malloc(sizeof(CarContainer));
+        //final_results = (CarContainer*)malloc(sizeof(CarContainer));
         final_results->array = (Car*)malloc(array1->size * sizeof(Car));
     }
     MPI_Wait(&size_request, MPI_STATUS_IGNORE);  // Wait for the gather of sizes to complete
@@ -330,4 +345,62 @@ CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
 
     printf("Intersect End\n");
     return final_results;
+}
+
+
+
+CarContainer* broadcastDatabase(CarContainer *container) {
+    int rank, size;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+
+    MPI_Bcast(&(container->size), 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&(container->capacity), 1, MPI_INT, 0, MPI_COMM_WORLD);
+
+    
+    if (rank != 0) {
+        container->array = (Car *)malloc(container->capacity * sizeof(Car));
+    }
+    
+    
+    MPI_Bcast(container->array, container->size * sizeof(Car), MPI_BYTE, 0, MPI_COMM_WORLD);
+
+
+    
+    for (int i = 0; i < container->capacity; i++) {
+        printf("%d\n", i);
+        printf("Size: %d\n", container->size);
+
+        
+        // Broadcast the length of each string
+        int model_len = 0;
+        int color_len = 0;
+        int dealer_len = 0;
+        if(rank == 0){
+            model_len = strlen(container->array[i].Model) + 1;
+            color_len = strlen(container->array[i].Color) + 1;
+            dealer_len = strlen(container->array[i].Dealer) + 1;
+        }
+
+    
+        MPI_Bcast(&model_len, 1, MPI_INT, 0, MPI_COMM_WORLD);
+        MPI_Bcast(&color_len, 1, MPI_INT, 0, MPI_COMM_WORLD);
+        MPI_Bcast(&dealer_len, 1, MPI_INT, 0, MPI_COMM_WORLD);
+       
+        
+        // Broadcast the actual string data
+        if (rank != 0) {
+            container->array[i].Model = (char *)calloc(model_len, sizeof(char));
+            container->array[i].Color = (char *)calloc(color_len, sizeof(char));
+            container->array[i].Dealer = (char *)calloc(dealer_len, sizeof(char));
+        }
+         
+
+        MPI_Bcast(container->array[i].Model, model_len, MPI_CHAR, 0, MPI_COMM_WORLD);
+        MPI_Bcast(container->array[i].Color, color_len, MPI_CHAR, 0, MPI_COMM_WORLD);
+        MPI_Bcast(container->array[i].Dealer, dealer_len, MPI_CHAR, 0, MPI_COMM_WORLD);
+    }
+
+    printf("End of Broadcast\n");
+    return container;
 }

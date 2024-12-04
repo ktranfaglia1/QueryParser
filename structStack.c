@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "structStack.h"
+#include "theDatabaser.h"
 
 
 
@@ -9,7 +10,7 @@ void initStructStack(structStack* stack) {
     stack->top = NULL;
 }
 
-void structPush(structStack* stack, void* value, size_t size) {
+void structPush(structStack* stack, void* value, size_t size) { //value cannot be accessed
     structStackNode* newNode = (structStackNode*)malloc(sizeof(structStackNode));
     if (!newNode) {
         fprintf(stderr, "Memory allocation failed!\n");
@@ -17,12 +18,15 @@ void structPush(structStack* stack, void* value, size_t size) {
     }
 
     newNode->data = malloc(size);  
+    
     if (!newNode->data) {
         fprintf(stderr, "Memory allocation for data failed!\n");
         exit(1);
     }
 
+    
     memcpy(newNode->data, value, size);
+    printf("Hit Point\n");
 
     newNode->next = stack->top; 
     stack->top = newNode;
