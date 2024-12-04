@@ -1,1 +1,1 @@
-./MPIDataBase $(cat SQLCommand.txt)
+mpirun ./MPIDataBase $(cat SQLCommand.txt)

@@ -10,6 +10,7 @@
 
 // Generalized filter function using MPI to return a filtered CarContainer based on a given condition
 CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOperation op, ComparisonObject obj) {
+    printf("Find Start\n");
     // Initialize MPI environment
     int rank, size;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -79,6 +80,7 @@ CarContainer* find_all(CarContainer* car_data, const void* value, ComparisonOper
         free(displs);
     }
 
+    printf("Find End\n");
     return rank == 0 ? final_results : NULL;  // Return the final results on rank 0, NULL on other ranks
 }
 
@@ -142,6 +144,7 @@ int condition(const Car* car, const void* value, ComparisonOperation op, Compari
 
 // Union of two CarContainer arrays using MPI
 CarContainer* union_arrays(CarContainer* array1, CarContainer* array2) {
+    printf("Union Start\n");
     // Initialize MPI environment
     int rank, size;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -227,11 +230,14 @@ CarContainer* union_arrays(CarContainer* array1, CarContainer* array2) {
         free(displs);
     }
 
+    printf("Union End\n");
+
     return final_results;
 }
 
 // Intersect of two CarContainer arrays using MPI
 CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
+    printf("Intersect Start\n");
     // Initialize MPI environment
     int rank, size;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -247,7 +253,9 @@ CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
     if (rank != 0) {
         array2->array = (Car*)malloc(array2->size * sizeof(Car));
     }
+    
     MPI_Bcast(array2->array, array2->size * sizeof(Car), MPI_BYTE, 0, MPI_COMM_WORLD);
+    
 
     // Initialize a container for the local results
     CarContainer* local_results = (CarContainer*)malloc(sizeof(CarContainer));
@@ -272,7 +280,7 @@ CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
         recv_sizes = (int*)malloc(size * sizeof(int));
     }
     MPI_Request size_request;
-    MPI_Igather(&local_size, 1, MPI_INT, recv_sizes, 1, MPI_INT, 0, MPI_COMM_WORLD, &size_request);
+    MPI_Igather(&local_size, 1, MPI_INT, recv_sizes, size, MPI_INT, 0, MPI_COMM_WORLD, &size_request);
 
     // Rank 0 prepares to merge the results
     CarContainer* final_results = NULL;
@@ -289,14 +297,17 @@ CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
         int total_size = 0;
         displs = (int*)malloc(size * sizeof(int));  // Allocate displacements array
         for (int i = 0; i < size; i++) {
+            printf("Total Size: %d\n", size);
             displs[i] = total_size;
             total_size += recv_sizes[i];
         }
         final_results->size = total_size;
     }
+    printf("Reached\n");
     MPI_Igatherv(local_results->array, local_results->size * sizeof(Car), MPI_BYTE,
-                 final_results ? final_results->array : NULL,
-                 recv_sizes, displs, MPI_BYTE, 0, MPI_COMM_WORLD, &gather_request);
+    final_results ? final_results->array : NULL, 
+    recv_sizes, displs, MPI_BYTE, 0, MPI_COMM_WORLD, &gather_request);
+    printf("Still Reached\n");
 
     MPI_Wait(&gather_request, MPI_STATUS_IGNORE);  // Wait for the gather of arrays to complete
 
@@ -311,5 +322,6 @@ CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
         free(array2->array);
     }
 
+    printf("Intersect End\n");
     return final_results;
 }
