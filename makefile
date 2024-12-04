@@ -3,8 +3,10 @@ CC=mpicc
 finalFile=MPIDataBase
 OBJS=QPEMPI.o parse.o QueryParsing.o searchUtilityMPI.o theDatabaser.o stringStack.o structStack.o
 
+FLAGS=-g -o
+
 $(finalFile): $(OBJS)
-	$(CC) -o $@ $^
+	$(CC) $(FLAGS) $@ $^
 
 %.o: %.c %.h
 	$(CC) -c -o $@ $<

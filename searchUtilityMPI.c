@@ -73,7 +73,7 @@ printf("Checkpoint 1\n");
     printf("Checkpoint 1.5\n");
     MPI_Gatherv(local_results->array, local_size * (int)(sizeof(Car)), MPI_BYTE,
                 final_results ? final_results->array : NULL,  recv_sizes, displs, MPI_BYTE,
-                0, MPI_COMM_WORLD);
+                0, MPI_COMM_WORLD); //Problem:: final_results array caused Segfault not defined outside of root
 printf("Checkpoint 2\n");
     // Free memory used for local results on all processes
     free(local_results->array);
@@ -85,8 +85,9 @@ printf("Checkpoint 2\n");
         free(displs);
     }
 
+    MPI_Bcast(&final_results, sizeof(final_results), MPI_BYTE, 0, MPI_COMM_WORLD);
     printf("Find End\n");
-    return rank == 0 ? final_results : NULL;  // Return the final results on rank 0, NULL on other ranks
+    return final_results;  // Return the final results on rank 0, NULL on other ranks
 }
 
 
