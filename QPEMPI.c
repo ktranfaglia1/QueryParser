@@ -7,11 +7,17 @@
 
 int main(int argc, char** argv) {
 
-    clock_t start_time = clock();
     
     int numQueries = 0;
     //Turns Parameter into Parsed Array
     char*** parameters = getParams(argc, argv, &numQueries); 
+    
+    CarContainer** databases = (CarContainer**)malloc(sizeof(CarContainer*) * numQueries);
+
+    for(int i = 0; i < numQueries; i++){
+        databases[i] = createDatabase(parameters[i * 3 + 1][1]);
+    }
+    
 
 
     for(int i = 0; i < numQueries; i++)
@@ -21,7 +27,7 @@ int main(int argc, char** argv) {
         printf("\nQuery %d\n\n", i);
 
         //Select Command Runs 
-        CarContainer* database = createDatabase(parameters[i * 3 + 1][1]);
+        
 
         
 
@@ -31,7 +37,7 @@ int main(int argc, char** argv) {
         
 
         //Runs Operations Accordingly
-        database = callOperations(database, postFix); 
+        CarContainer* database = callOperations(databases[i], postFix); 
 
         //Outputs Database with proper columns
         printDatabase(database, parameters[i * 3]);
@@ -42,12 +48,9 @@ int main(int argc, char** argv) {
         clock_t query_end_time = clock();
 
         double query_duration = (double)(query_end_time - query_start_time) / CLOCKS_PER_SEC;
-        printf("Query took %f seconds\n", query_duration);
+
     }
 
-    clock_t end_time = clock();
-    double total_duration = (double)(end_time - start_time) / CLOCKS_PER_SEC;
-    printf("\nTotal runtime: %f seconds\n", total_duration);
 
     return 0;
 }
