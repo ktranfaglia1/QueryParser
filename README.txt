@@ -75,6 +75,7 @@ Dustin:
   - Created Main and functions to call operations
   - Handled database memory and leaks
   - Debugged and handled linking of files and various compilation and runtime issues
+  - Created Second Version of MPI Main
 Olivia:
   - Tested and calculated time complexity of algorithms
   - Created Hashmap structure and functions
