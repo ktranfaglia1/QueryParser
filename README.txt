@@ -55,7 +55,7 @@ structStack.c and .h : includes functionality for loading our custom structure i
 stringStack.c and .h : includes functionality for loading strings into a stack to push strings on and pop top one off
 searchUtility.c and .h : Pairs with OPESeq.c to search database in sequential
 searchUtilityOMP.c and .h : Pairs with OPEOMP to search database in parallel using OpenMP
-searchUtilityMPI.c and .h : Pairs with OPEMPI to search database in parallel using MPI
+(Deprecated) searchUtilityMPI.c and .h : Pairs with OPEMPI to search database in parallel using MPI
 parse.c and .h : Takes in SQLCommand.txt and breaks it down into parameters for various other helper functions including one that takes instructions following WHERE keyword and convert to postfix operations
 QueryParsing.c and .h : Takes postfix operation and uses it to query database for cars meeting query requirements
 SQLCommand.txt : Contains sample SQL Query but this one really isn't necassary. If you wish to use another .txt file, make sure it contains that formatted query and is in the same directory as everything else, then
