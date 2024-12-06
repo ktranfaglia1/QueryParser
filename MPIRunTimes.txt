@@ -1,3 +1,7 @@
+Cars: 100000
+Processors: 2
+Query:
 SELECT ID, Model, YearMake, Color 
 FROM car_inventory 
 WHERE Model="accord" AND YearMake="2015" AND (Color="blue" OR Color="gray");
+Time: 
