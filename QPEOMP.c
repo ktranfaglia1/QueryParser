@@ -12,6 +12,7 @@ int main(int argc, char** argv) {
 
     double totalStartTime = omp_get_wtime();  // Start total timer
 
+    #pragma omp parallel for
     for(int i = 0; i < numQueries; i++) {
 
         printf("\nQuery %d\n\n", i);
