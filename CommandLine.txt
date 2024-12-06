@@ -1,1 +1,1 @@
-./SerialDataBase $(cat SQLCommand.txt)
+./SerialDataBase $(cat SQLCommand.txt) 2>/dev/null

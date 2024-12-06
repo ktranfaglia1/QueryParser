@@ -1,15 +1,34 @@
 CC=gcc
+MPICC=mpicc
+
+OBJS=parse.o QueryParsing.o theDatabaser.o stringStack.o structStack.o
+
+SER= QPESeq.o searchUtility.o
+OMP= QPEOMP.o searchUtilityOMP.o
+MPI= QPEMPI.o searchUtility.o
 
 
-OBJS=QPESeq.o parse.o QueryParsing.o searchUtility.o theDatabaser.o stringStack.o structStack.o
+all: SerialDataBase OMPDataBase MPIDataBase
 
-SerialDataBase: $(OBJS)
+SerialDataBase: $(SER) $(OBJS)
 	$(CC) -o $@ $^
+
+OMPDataBase: $(OMP) $(OBJS)
+	$(CC) -fopenmp -o $@ $^
+
+MPIDataBase: $(MPI) $(OBJS)
+	mpicc -o $@ $^
+
+
+QPEMPI.o: QPEMPI.c
+	$(MPICC) -c -o $@ $<
 
 %.o: %.c %.h
 	$(CC) -c -o $@ $<
 
+
+
 .PHONY: clean
 
 clean:
-	rm -f $(OBJS) SerialDataBase
+	rm -f $(OBJS) $(SER) $(OMP) $(MPI) SerialDataBase OMPDataBase MPIDataBase
