@@ -23,6 +23,7 @@ int main(int argc, char** argv) {
     
     MPI_Init(&argc, &argv);
 
+    double start_time = MPI_Wtime();
 
     for(int i = 0; i < numQueries; i++){
         databases[i] = createDatabase(parameters[i * 3 + 1][1]);
@@ -82,13 +83,13 @@ int main(int argc, char** argv) {
 
         //Outputs Database with proper columns
         //printf("Thread %d\n", rank);
-        sleep(i * 1);
-        if(rank < numQueries){
-            printf("Query %d\n\n", i);
-        }
-        else{
-            sleep(.1);
-        }
+        //sleep(i * 1);
+        //if(rank < numQueries){
+        //    printf("Query %d\n\n", i);
+        //}
+        //else{
+        //    sleep(.1);
+        //}
         printDatabase(database, parameters[i * 3]);
 
         //2>/dev/null
@@ -102,7 +103,8 @@ int main(int argc, char** argv) {
         //printf("End\n");
     }
 
-    
+    double end_time = MPI_Wtime(); 
+    printf("Total program execution time: %f seconds\n", end_time - start_time);
 
     MPI_Barrier(MPI_COMM_WORLD);
 

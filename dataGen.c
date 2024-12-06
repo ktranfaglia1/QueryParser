@@ -8,7 +8,7 @@
 #include <string.h>
 #include <time.h>
 
-#define NUM_CARS 100000
+#define NUM_CARS 1600000
 #define NUM_MODELS 225
 #define NUM_DEALERS 100
 #define NUM_COLORS 15
