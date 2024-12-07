@@ -167,6 +167,8 @@ CarContainer* union_arrays(CarContainer* array1, CarContainer* array2) {
     return result;
 }
 
+
+/*
 // Intersection of two CarContainer arrays
 CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
     // Allocate space for the result container and initialize the CarContainer object
@@ -179,7 +181,7 @@ CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
     #pragma omp parallel
     {
         // Allocate and initialize thread-local result container
-        CarContainer local_result = {0};
+        CarContainer local_result;
         local_result.array = (Car*)malloc(capacity * sizeof(Car));
         local_result.size = 0;
         local_result.capacity = capacity;
@@ -204,13 +206,45 @@ CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
         // Merge thread-local results into the global result
         #pragma omp critical
         {
+            
             if (result->size + local_result.size > capacity) {
-                result->array = realloc(result->array, (result->size + local_result.size) * sizeof(Car));
+                result->array = (Car*)realloc(result->array, (result->size + local_result.size) * sizeof(Car));
             }
+            printf("Hit Here\n");
             memcpy(result->array + result->size, local_result.array, local_result.size * sizeof(Car));
             result->size += local_result.size;
         }
         free(local_result.array);
+    }
+    return result;
+}
+*/
+
+
+// Intersection of two CarContainer arrays
+CarContainer* intersect_arrays(CarContainer* array1, CarContainer* array2) {
+    // Allocate space for the result container and initialize the CarContainer object
+    CarContainer* result = (CarContainer*)malloc(sizeof(CarContainer));
+    int capacity = 64;
+    result->array = (Car*)malloc(capacity * sizeof(Car));
+    result->size = 0;
+    result->capacity = capacity;
+
+    // Iterate through the first array
+    #pragma omp parallel for
+    for (int i = 0; i < array1->size; i++) {
+        // Check if the current car is present in the second array
+        for (int j = 0; j < array2->size; j++) {
+            // If found, add the car to the result
+            if (array1->array[i].ID == array2->array[j].ID) {
+                if (result->size == result->capacity) {
+                    result->capacity *= 2;
+                    result->array = (Car*)realloc(result->array, result->capacity * sizeof(Car));
+                }
+                result->array[result->size++] = copyCar(array2->array[j]);
+                break;
+            }
+        }
     }
     return result;
 }

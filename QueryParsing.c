@@ -85,7 +85,7 @@ CarContainer* callOperations(CarContainer* database, opTuple* inFixOperations){
         } else{
             ComparisonObject dataType = strToObject(inFixOperations[i].dataType);
 
-            //::BREAKS HERE::
+
             newData =  find_all(database, objectToDataType(inFixOperations[i].object, dataType), opToEnum(inFixOperations[i].condition), dataType);
             structPush(dataStack, newData, sizeof(*newData)); 
 

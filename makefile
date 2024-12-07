@@ -1,5 +1,5 @@
-CC=gcc
-MPICC=mpicc
+CC=gcc 
+MPICC=mpicc 
 
 OBJS=parse.o QueryParsing.o theDatabaser.o stringStack.o structStack.o
 
@@ -14,7 +14,7 @@ SerialDataBase: $(SER) $(OBJS)
 	$(CC) -o $@ $^
 
 OMPDataBase: $(OMP) $(OBJS)
-	$(CC) -fopenmp -o $@ $^
+	$(CC) -O0 -fopenmp -o $@ $^
 
 MPIDataBase: $(MPI) $(OBJS)
 	mpicc -o $@ $^
